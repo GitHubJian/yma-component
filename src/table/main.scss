@@ -1,0 +1,210 @@
+@import 'yma-csskit/bem.scss';
+
+@include b(table) {
+    position: relative;
+    box-sizing: border-box;
+    max-width: 100%;
+    background-color: #fff;
+    font-size: 14px;
+    color: #606255;
+
+    @include e(hidden) {
+        visibility: hidden;
+        position: absolute;
+        z-index: -1;
+    }
+
+    @include e((header-wrapper, body-wrapper)) {
+        width: 100%;
+    }
+
+    @include e(header-wrapper) {
+    }
+
+    @include e(header) {
+    }
+
+    @include e(tr) {
+        position: relative;
+        display: flex;
+        background-color: #fff;
+        height: 49px;
+    }
+
+    @include e((th, td)) {
+        flex: 1;
+        min-width: 0;
+        box-sizing: border-box;
+        text-overflow: ellipsis;
+        vertical-align: middle;
+        position: relative;
+
+        @include when(center) {
+            text-align: center;
+        }
+    }
+
+    @include e(th) {
+        overflow: hidden;
+        user-select: none;
+        background-color: #fff;
+
+        @include when(pad) {
+            flex: none;
+
+            .yma-table__cell {
+                height: 100%;
+            }
+        }
+    }
+
+    @include e(cell) {
+        padding: 13px 16px;
+        font-family: PingFang SC;
+        font-size: 14px;
+        line-height: 22px;
+        color: var(---kd-color-text-primary, #0d0d0de5);
+    }
+
+    @include e(body) {
+        @include e(tr) {
+            border-width: 0 0 1px 0;
+            border-style: solid;
+            border-color: var(---kd-color-line-regular, #0d0d0d1f);
+        }
+    }
+
+    .yma-table__th {
+        .yma-table__cell {
+            font-weight: 600;
+            background: var(---kd-color-fill-light, #f5f5f5);
+        }
+    }
+
+    .yma-table__td {
+        .yma-table__cell {
+            font-weight: 400;
+        }
+    }
+
+    .yma-table__tr {
+        .yma-table__th:first-child {
+            border-top-left-radius: 8px;
+        }
+
+        .yma-table__th:last-child {
+            border-top-right-radius: 8px;
+        }
+    }
+
+    @include m(fixed) {
+        & {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        @include e(body-wrapper) {
+            flex: 1;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        @include e(body) {
+            height: 100%;
+            overflow: auto;
+        }
+    }
+}
+
+@include b(table) {
+    @include e(append) {
+        position: absolute;
+        bottom: -6px;
+        left: 0;
+        width: 100%;
+        height: 12px;
+        opacity: 0;
+        z-index: 10;
+
+        &:hover {
+            opacity: 1;
+            cursor: pointer;
+        }
+    }
+
+    @include e(append-line) {
+        position: absolute;
+        top: 5px;
+        left: 0;
+        width: 100%;
+        height: 2px;
+        background-color: var(---, #3b64fc);
+    }
+
+    @include e(append-icon) {
+        display: inline-block;
+        position: relative;
+        top: -3px;
+        left: 0px;
+        width: 12px;
+        height: 12px;
+        border-radius: 12px;
+        background-color: var(---, #3b64fc);
+    }
+
+    @include e(append-p) {
+        position: absolute;
+        top: 5px;
+        left: 3px;
+        width: 6px;
+        height: 2px;
+        border-radius: 2px;
+        background: #fff;
+
+        @include when(v) {
+            transform: rotate(90deg);
+        }
+    }
+}
+
+@import './mixin/mouse/index.scss';
+
+@include b(table) {
+    @include e(tbody) {
+        @include m(draging) {
+            @include e(append) {
+                display: none;
+            }
+        }
+    }
+}
+
+.yma-dragsort {
+    &.yma-dragsort--draging {
+        .yma-table__append {
+            display: none;
+        }
+    }
+}
+
+@include b(table) {
+    @include e(tbody-input) {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 100;
+    }
+
+    @include e(tbody-input-mask) {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0.5;
+        background: #000;
+    }
+}

@@ -1,0 +1,21 @@
+@include b(dragsort) {
+    position: relative;
+    overflow-y: hidden;
+
+    @include e(item) {
+        user-select: none;
+        cursor: move;
+
+        @include m(moving) {
+            background: #f5f5f5e5;
+            border-radius: 4px;
+            border: 0;
+        }
+    }
+
+    @include e(placeholder) {
+        background: transparent;
+        color: transparent;
+        border: 1px dashed #ccc;
+    }
+}
