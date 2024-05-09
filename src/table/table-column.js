@@ -1,9 +1,4 @@
-import {
-    getPropByPath,
-    mergeOptions,
-    compose,
-    parseWidth,
-} from './util';
+import {getPropByPath, mergeOptions, compose, parseWidth} from './util';
 function defaultRenderCell(h, {row, column, $index}) {
     const property = column.property;
     const value = property && getPropByPath(row, property).v;
@@ -21,6 +16,7 @@ export default {
         prop: String,
         width: String,
         align: String,
+        fixed: [Boolean, String],
     },
     data() {
         return {
@@ -57,8 +53,7 @@ export default {
     },
     created() {
         const parent = this.columnOrTableParent;
-        this.columnId =
-            (parent.tableId || parent.columnId) + '_column_' + columnIdSeed++;
+        this.columnId = (parent.tableId || parent.columnId) + '_column_' + columnIdSeed++;
 
         const defaults = {
             id: this.columnId,
@@ -67,7 +62,7 @@ export default {
             align: this.realAlign,
         };
 
-        const basicProps = ['label', 'className'];
+        const basicProps = ['label', 'className', 'fixed'];
 
         let column = this.getPropsData(basicProps);
         column = mergeOptions(defaults, column);
@@ -106,12 +101,16 @@ export default {
                 column.width = this.realWidth;
             }
 
-            column.realWidth =
-                column.width === undefined ? 'auto' : column.width;
+            column.realWidth = column.width === undefined ? 'auto' : column.width;
 
             return column;
         },
         setColumnRenders(column) {
+            column.renderHeader = (h, scope) => {
+                const renderHeader = this.$scopedSlots.header;
+                return renderHeader ? renderHeader(scope) : column.label;
+            };
+
             const that = this;
             let originRenderCell = column.renderCell || defaultRenderCell;
             column.renderCell = (h, data) => {

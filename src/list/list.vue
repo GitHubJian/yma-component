@@ -1,6 +1,6 @@
 <template>
     <div class="yma-list">
-        
+
 
         <div class="yma-list__body">
             <slot></slot>
@@ -10,14 +10,14 @@
 
 <script>
 export default {
-    name: "YmaList",
-}
+    name: 'YmaList',
+};
 </script>
 
 <style lang="scss">
 @import "yma-csskit/bem.scss";
 
 @include b(list) {
-   
+
 }
 </style>

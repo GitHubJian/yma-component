@@ -1,11 +1,13 @@
 <template>
-    <div :class="{
-        'yma-menu__item': true,
-        'is-active': active,
-    }" @click="handleClick">
+    <div
+        :class="{
+            'yma-menu__item': true,
+            'is-active': active,
+        }" @click="handleClick"
+    >
         <div class="yma-menu__inner">
             <span class="yma-menu__icon">
-                <yma-icon :name="icon"></yma-icon>
+                <yma-icon :name="icon"/>
             </span>
             <span class="yma-menu__title">{{ title }}</span>
         </div>
@@ -14,51 +16,51 @@
 
 <script>
 import emitter from '../helper/emitter';
-import mixin from './mixin'
-import YmaIcon from '../icon'
+import mixin from './mixin';
+import YmaIcon from '../icon';
 
 export default {
     name: 'YmaMenuItem',
-    componentName: "YmaMenuItem",
+    componentName: 'YmaMenuItem',
     components: {
-        YmaIcon
+        YmaIcon,
     },
     mixins: [emitter, mixin],
     props: {
         index: {
             default: null,
-            validator: val => typeof val === 'string' || val === null
+            validator: val => typeof val === 'string' || val === null,
         },
         disabled: Boolean,
         icon: {
-            type: String
+            type: String,
         },
         title: {
             type: String,
-            required: true
-        }
+            required: true,
+        },
     },
     computed: {
-        active () {
-            return this.index === this.rootMenu.activeIndex
+        active() {
+            return this.index === this.rootMenu.activeIndex;
         },
     },
     methods: {
-        handleClick () {
+        handleClick() {
             if (!this.disabled) {
                 this.dispatch('YmaMenu', 'item-click', this);
                 this.$emit('click', this);
             }
-        }
+        },
     },
-    mounted () {
+    mounted() {
         this.parentMenu.addItem(this);
         this.rootMenu.addItem(this);
     },
-    beforeDestroy () {
+    beforeDestroy() {
         this.parentMenu.removeItem(this);
         this.rootMenu.removeItem(this);
-    }
+    },
 };
 </script>
 
@@ -67,34 +69,33 @@ export default {
 
 @include b((menu)) {
     @include e(item) {
+        @include when(active) {
+            border-radius: 4px;
+            background-color: #3b64fc26;
+            color: #3b64fc;
+            font-weight: 600;
+        }
+
+        box-sizing: border-box;
         height: 36px;
         padding: 10px 4px 10px 22px;
         color: var(---kd-color-text-primary, #0d0d0de5);
         font-weight: 400;
         font-size: 14px;
         font-family: PingFang SC;
-        text-align: left;
         line-height: 14px;
-        box-sizing: border-box;
+        text-align: left;
         cursor: pointer;
 
-        @include when(active) {
-            border-radius: 4px;
-            background-color: #3B64FC26;
-            font-weight: 600;
-            color: #3B64FC;
-        }
-
-        &+& {
+        & + & {
             margin-top: 4px;
         }
 
-
-        &+.yma-submenu {
+        & + .yma-submenu {
             margin-top: 4px;
         }
 
-        .yma-submenu+& {
+        .yma-submenu + & {
             margin-top: 4px;
         }
     }

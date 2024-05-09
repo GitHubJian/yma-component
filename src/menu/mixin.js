@@ -14,12 +14,7 @@ export default {
         },
         parentMenu() {
             let parent = this.$parent;
-            while (
-                parent &&
-                ['YmaMenu', 'YmaSubmenu'].indexOf(
-                    parent.$options.componentName
-                ) === -1
-            ) {
+            while (parent && ['YmaMenu', 'YmaSubmenu'].indexOf(parent.$options.componentName) === -1) {
                 parent = parent.$parent;
             }
             return parent;

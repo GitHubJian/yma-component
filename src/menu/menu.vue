@@ -5,77 +5,78 @@
 </template>
 
 <script>
-import emitter from '../helper/emitter'
+import emitter from '../helper/emitter';
 
 export default {
     name: 'YmaMenu',
-    componentName: "YmaMenu",
+    componentName: 'YmaMenu',
     mixins: [emitter],
-    provide () {
+    provide() {
         return {
-            rootMenu: this
+            rootMenu: this,
         };
     },
     props: {
         defaultActive: {
             type: String,
-            default: ''
+            default: '',
         },
         defaultOpeneds: Array,
         collapse: Boolean,
     },
-    data () {
+    data() {
         return {
             activeIndex: this.defaultActive,
             openedMenus: (this.defaultOpeneds && !this.collapse) ? this.defaultOpeneds.slice(0) : [],
             items: {},
-            submenus: {}
-        }
+            submenus: {},
+        };
     },
     watch: {
-        defaultActive (newVal) {
+        defaultActive(newVal) {
             if (!this.items[newVal]) {
                 this.activeIndex = null;
             }
 
-            this.updateActiveIndex(newVal)
+            this.updateActiveIndex(newVal);
         },
-        defaultOpeneds (value) {
+        defaultOpeneds(value) {
             if (!this.collapse) {
                 this.openedMenus = value;
             }
         },
-        collapse (value) {
+        collapse(value) {
             if (value) {
                 this.openedMenus = [];
             }
 
             this.broadcast('YmaSubmenu', 'toggle-collapse', value);
-        }
+        },
     },
     methods: {
-        updateActiveIndex (val) {
+        updateActiveIndex(val) {
             const item = this.items[val] || this.items[this.activeIndex] || this.items[this.defaultActive];
             if (item) {
                 this.activeIndex = item.index;
                 this.initOpenedMenu();
-            } else {
+            }
+            else {
                 this.activeIndex = null;
             }
         },
-        addItem (item) {
+        addItem(item) {
             this.$set(this.items, item.index, item);
         },
-        removeItem (item) {
+        removeItem(item) {
             delete this.items[item.index];
         },
-        addSubmenu (item) {
+        addSubmenu(item) {
             this.$set(this.submenus, item.index, item);
         },
-        removeSubmenu (item) {
+        removeSubmenu(item) {
             delete this.submenus[item.index];
         },
-        openMenu (index, indexPath) {
+        openMenu(index, indexPath) {
             let openedMenus = this.openedMenus;
             if (openedMenus.indexOf(index) !== -1) {
                 return;
@@ -89,26 +90,27 @@ export default {
 
             this.openedMenus.push(index);
         },
-        closeMenu (index) {
+        closeMenu(index) {
             const i = this.openedMenus.indexOf(index);
             if (i !== -1) {
                 this.openedMenus.splice(i, 1);
             }
         },
-        handleSubmenuClick (submenu) {
-            const { index, indexPath } = submenu;
+        handleSubmenuClick(submenu) {
+            const {index, indexPath} = submenu;
             let isOpened = this.openedMenus.indexOf(index) !== -1;
 
             if (isOpened) {
                 this.closeMenu(index);
                 this.$emit('close', index, indexPath);
-            } else {
+            }
+            else {
                 this.openMenu(index, indexPath);
                 this.$emit('open', index, indexPath);
             }
         },
-        handleItemClick (item) {
-            const { index, indexPath } = item;
+        handleItemClick(item) {
+            const {index, indexPath} = item;
             const hasIndex = item.index !== null;
 
             if (hasIndex) {
@@ -117,10 +119,12 @@ export default {
 
             this.$emit('select', index, indexPath, item);
         },
-        initOpenedMenu () {
+        initOpenedMenu() {
             const index = this.activeIndex;
             const activeItem = this.items[index];
-            if (!activeItem || this.collapse) return;
+            if (!activeItem || this.collapse) {
+                return;
+            }
 
             let indexPath = activeItem.indexPath;
 
@@ -129,20 +133,20 @@ export default {
                 submenu && this.openMenu(index, submenu.indexPath);
             });
         },
-        open (index) {
-            const { indexPath } = this.submenus[index.toString()];
+        open(index) {
+            const {indexPath} = this.submenus[index.toString()];
             indexPath.forEach(i => this.openMenu(i, indexPath));
         },
-        close (index) {
+        close(index) {
             this.closeMenu(index);
-        }
+        },
     },
-    mounted () {
+    mounted() {
         this.initOpenedMenu();
         this.$on('item-click', this.handleItemClick);
         this.$on('submenu-click', this.handleSubmenuClick);
         this.$watch('items', this.updateActiveIndex);
-    }
+    },
 };
 </script>
 

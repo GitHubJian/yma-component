@@ -125,11 +125,7 @@ function mousesort(el, options) {
                 },
             });
 
-            insertBefore(
-                targetEl.parentNode,
-                phEl,
-                targetEl.nextElementSibling
-            );
+            insertBefore(targetEl.parentNode, phEl, targetEl.nextElementSibling);
         }
 
         const left = e.clientX - x - elX;
@@ -175,14 +171,7 @@ function mousesort(el, options) {
             removeSelf(phEl);
         }
 
-        removeStyles(targetEl, [
-            'position',
-            'top',
-            'left',
-            'width',
-            'height',
-            'z-index',
-        ]);
+        removeStyles(targetEl, ['position', 'top', 'left', 'width', 'height', 'z-index']);
 
         removeClass(targetEl, CLASSNAMES.moving);
         removeClass(el, CLASSNAMES.draging);

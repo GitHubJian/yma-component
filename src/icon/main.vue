@@ -1,13 +1,15 @@
 <template>
-    <span :class="[
-        {
-            'yma-icon': true,
-            'is-cover': isCover,
-        },
-        'yma-icon-' + name,
-    ]" :style="customStyle">
+    <span
+        :class="[
+            {
+                'yma-icon': true,
+                'is-cover': isCover,
+            },
+            'yma-icon-' + name,
+        ]" :style="customStyle"
+    >
         <svg class="yma-icon__inner">
-            <use :xlink:href="href" />
+            <use :xlink:href="href"/>
         </svg>
     </span>
 </template>
@@ -18,7 +20,7 @@ export default {
     props: {
         name: String,
         isCover: {
-            type: Boolean, default: false
+            type: Boolean, default: false,
         },
         size: {
             type: String,
@@ -26,10 +28,10 @@ export default {
         },
     },
     computed: {
-        href () {
+        href() {
             return `#${this.name}`;
         },
-        customStyle () {
+        customStyle() {
             if (this.isCover) {
                 return null;
             }
@@ -48,11 +50,6 @@ export default {
 @import 'yma-csskit/bem.scss';
 
 @include b(icon) {
-    display: inline-block;
-    width: 16px;
-    height: 16px;
-    font-size: 0;
-
     @include when(cover) {
         width: 100%;
         height: 100%;
@@ -61,6 +58,15 @@ export default {
     @include e(inner) {
         width: 100%;
         height: 100%;
+    }
+
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    font-size: 0;
+
+    & + span {
+        display: inline-block;
     }
 }
 </style>

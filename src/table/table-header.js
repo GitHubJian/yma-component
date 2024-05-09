@@ -55,14 +55,16 @@ export default {
                     <div class='yma-table__tr'>
                         {columns.map((column, cellIndex) => {
                             return (
-                                <div
-                                    class={[
-                                        'yma-table__th',
-                                        this.getCellClass(column),
-                                    ]}
-                                    key={'td_' + cellIndex}>
+                                <div class={['yma-table__th', this.getCellClass(column)]} key={'td_' + cellIndex}>
                                     <div class='yma-table__cell'>
-                                        {column.label}
+                                        {column.renderHeader
+                                            ? column.renderHeader.call(this._renderProxy, h, {
+                                                  column,
+                                                  $index: cellIndex,
+                                                  store: this.store,
+                                                  _self: this.$parent.$vnode.context,
+                                              })
+                                            : column.label}
                                     </div>
                                 </div>
                             );
@@ -74,7 +76,8 @@ export default {
                                 style={{
                                     width: padWidth + 'px',
                                     flex: 'none',
-                                }}>
+                                }}
+                            >
                                 <div class='yma-table__cell'></div>
                             </div>
                         ) : null}

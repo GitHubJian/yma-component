@@ -42,34 +42,20 @@ export default {
         },
     },
     render(h) {
-        const {
-            columns,
-            isScroll,
-            padWidth,
-            trStyle,
-            inputs,
-            handleSubmit,
-            handleCancel,
-        } = this;
+        const {columns, isScroll, padWidth, trStyle, inputs, handleSubmit, handleCancel} = this;
         const len = columns.length;
 
         return (
             <div class={'yma-table__tbody yma-table__tbody-input'}>
-                <div
-                    class={'yma-table__tbody-input-mask'}
-                    on-click={handleCancel}></div>
+                <div class={'yma-table__tbody-input-mask'} on-click={handleCancel}></div>
                 <div class={'yma-table__tr'} style={trStyle}>
                     {columns.map((_, i) => {
                         const template =
                             i === len - 1 ? (
                                 <div class={'yma-table__td'}>
                                     <div class={'yma-table__cell'}>
-                                        <span on-click={handleSubmit}>
-                                            确定
-                                        </span>
-                                        <span on-click={handleCancel}>
-                                            删除
-                                        </span>
+                                        <span on-click={handleSubmit}>确定</span>
+                                        <span on-click={handleCancel}>删除</span>
                                     </div>
                                 </div>
                             ) : (
@@ -80,7 +66,8 @@ export default {
                                             type='text'
                                             on-change={e => {
                                                 inputs[i] = e.target.value;
-                                            }}></input>
+                                            }}
+                                        ></input>
                                     </div>
                                 </div>
                             );
@@ -94,7 +81,8 @@ export default {
                             style={{
                                 width: padWidth + 'px',
                                 flex: 'none',
-                            }}>
+                            }}
+                        >
                             <div class='yma-table__cell'></div>
                         </div>
                     ) : null}

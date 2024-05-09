@@ -1,6 +1,9 @@
+import Breadcrumb from './breadcrumb';
 import Center from './center';
 import Col from './col';
 import Desktop from './desktop';
+import Dropdown from './dropdown';
+import Form from './form';
 import Icon from './icon';
 import Link from './link';
 import List from './list';
@@ -9,11 +12,16 @@ import Panel from './panel';
 import Scroll from './scroll';
 import Row from './row';
 import Table from './table';
+import Tag from './tag';
+import Text from './text';
 
 const components = [
+    Breadcrumb,
     Center,
     Col,
     Desktop,
+    Dropdown,
+    Form,
     Icon,
     Link,
     List,
@@ -22,6 +30,8 @@ const components = [
     Scroll,
     Row,
     Table,
+    Tag,
+    Text,
 ];
 
 const install = function (Vue) {
@@ -32,13 +42,20 @@ const install = function (Vue) {
 
 export default {
     install,
+    Breadcrumb,
+    Center,
+    Col,
     Desktop,
+    Dropdown,
+    Form,
     Icon,
-    Menu,
-    Panel,
     Link,
     List,
-    Table,
+    Menu,
+    Panel,
     Scroll,
-    Center,
+    Row,
+    Table,
+    Tag,
+    Text,
 };

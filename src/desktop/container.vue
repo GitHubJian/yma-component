@@ -1,7 +1,10 @@
 <template>
-    <section class="yma-container" :class="{ 'is-vertical': isVertical }" :style="{
-        'gap': gap
-    }">
+    <section
+        class="yma-container" :class="{ 'is-vertical': isVertical }"
+        :style="{
+            'gap': gap
+        }"
+    >
         <slot></slot>
     </section>
 </template>
@@ -18,7 +21,7 @@ export default {
         },
     },
     computed: {
-        isVertical () {
+        isVertical() {
             if (this.direction === 'vertical') {
                 return true;
             }
@@ -43,16 +46,16 @@ export default {
 @import 'yma-csskit/bem.scss';
 
 @include b(container) {
-    display: flex;
-    flex-direction: row;
-    flex: 1;
-    flex-basis: auto;
-    box-sizing: border-box;
-    min-width: 0;
-    overflow: hidden;
-
     @include when(vertical) {
         flex-direction: column;
     }
+
+    display: flex;
+    flex: 1;
+    flex-basis: auto;
+    flex-direction: row;
+    overflow: hidden;
+    box-sizing: border-box;
+    min-width: 0;
 }
 </style>

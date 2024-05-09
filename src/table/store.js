@@ -8,6 +8,14 @@ const Store = Vue.extend({
 
                 _columns: [],
                 columns: [],
+                fixedColumns: [],
+                rightFixedColumns: [],
+                leafColumns: [],
+                fixedLeafColumns: [],
+                rightFixedLeafColumns: [],
+                leafColumnsLength: 0,
+                fixedLeafColumnsLength: 0,
+                rightFixedLeafColumnsLength: 0,
 
                 isScroll: false,
 
@@ -19,8 +27,23 @@ const Store = Vue.extend({
         updateColumns() {
             const states = this.states;
             const _columns = states._columns || [];
-            //
-            states.columns = _columns;
+            states.fixedColumns = _columns.filter(column => column.fixed === true || column.fixed === 'left');
+            states.rightFixedColumns = _columns.filter(column => column.fixed === 'right');
+            const notFixedColumns = _columns.filter(column => !column.fixed);
+            states.originColumns = []
+                .concat(states.fixedColumns)
+                .concat(notFixedColumns)
+                .concat(states.rightFixedColumns);
+
+            const leafColumns = notFixedColumns;
+            const fixedLeafColumns = states.fixedColumns;
+            const rightFixedLeafColumns = states.rightFixedColumns;
+
+            states.leafColumnsLength = leafColumns.length;
+            states.fixedLeafColumnsLength = fixedLeafColumns.length;
+            states.rightFixedLeafColumnsLength = rightFixedLeafColumns.length;
+
+            states.columns = [].concat(fixedLeafColumns).concat(leafColumns).concat(rightFixedLeafColumns);
         },
     },
 });

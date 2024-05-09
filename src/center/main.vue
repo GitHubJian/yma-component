@@ -1,10 +1,12 @@
 <template>
-    <div :class="{
-        'yma-center': true,
-        'yma-center--center': align === 'center',
-        'yma-center--horizontal': align === 'horizontal',
-        'yma-center--vertical': align === 'vertical',
-    }">
+    <div
+        :class="{
+            'yma-center': true,
+            'yma-center--center': align === 'center',
+            'yma-center--horizontal': align === 'horizontal',
+            'yma-center--vertical': align === 'vertical',
+        }"
+    >
         <div class="yma-center__inner">
             <slot></slot>
         </div>
@@ -27,13 +29,9 @@ export default {
 @import 'yma-csskit/bem.scss';
 
 @include b(center) {
-    width: 100%;
-    height: 100%;
-    display: flex;
-
     @include m(center) {
-        justify-content: center;
         align-items: center;
+        justify-content: center;
     }
 
     @include m(horizontal) {
@@ -47,5 +45,9 @@ export default {
     @include e(inner) {
         display: inline-block;
     }
+
+    display: flex;
+    width: 100%;
+    height: 100%;
 }
 </style>

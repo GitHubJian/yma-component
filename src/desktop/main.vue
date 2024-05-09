@@ -19,8 +19,8 @@ export default {
 @include b(main) {
     display: block;
     flex: 1;
+    overflow: hidden;
     // flex-basis: auto;
     box-sizing: border-box;
-    overflow: hidden;
 }
 </style>

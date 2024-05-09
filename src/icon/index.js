@@ -1,4 +1,4 @@
-require('./plugin')
+require('./plugin');
 
 import Main from './main.vue';
 

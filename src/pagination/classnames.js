@@ -13,10 +13,7 @@ function parseValue(arg) {
         return classnames.apply(null, arg);
     }
 
-    if (
-        arg.toString !== Object.prototype.toString &&
-        !arg.toString.toString().includes('[native code]')
-    ) {
+    if (arg.toString !== Object.prototype.toString && !arg.toString.toString().includes('[native code]')) {
         return arg.toString();
     }
 

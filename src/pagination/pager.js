@@ -46,11 +46,7 @@ export default {
                 }
             } else if (showPrevMore && showNextMore) {
                 const offset = Math.floor(pagerCount / 2) - 1;
-                for (
-                    let i = currentPage - offset;
-                    i <= currentPage + offset;
-                    i++
-                ) {
+                for (let i = currentPage - offset; i <= currentPage + offset; i++) {
                     array.push(i);
                 }
             } else {
@@ -66,14 +62,7 @@ export default {
         },
     },
     render(h) {
-        const {
-            pageCount,
-            currentPage,
-            disabled,
-            showPrevMore,
-            pagers,
-            showNextMore,
-        } = this;
+        const {pageCount, currentPage, disabled, showPrevMore, pagers, showNextMore} = this;
 
         return (
             <ul class='yma-pager'>
@@ -83,7 +72,8 @@ export default {
                             'yma-pager__number': true,
                             'is-active': currentPage === 1,
                             'is-disabled': disabled,
-                        }}></li>
+                        }}
+                    ></li>
                 ) : null}
 
                 {showPrevMore ? (
@@ -92,7 +82,8 @@ export default {
                             'yma-pager__quick': true,
                             'yma-pager__quick-prev': true,
                             'is-disabled': disabled,
-                        }}></li>
+                        }}
+                    ></li>
                 ) : null}
 
                 {pagers.map(pager => {
@@ -103,7 +94,8 @@ export default {
                                 'yma-pager__number': true,
                                 'is-active': currentPage === pager,
                                 'is-disabled': disabled,
-                            }}>
+                            }}
+                        >
                             {pager}
                         </li>
                     );
@@ -115,7 +107,8 @@ export default {
                             'yma-pager__quick': true,
                             'yma-pager__quick-next': true,
                             'is-disabled': disabled,
-                        }}></li>
+                        }}
+                    ></li>
                 ) : null}
 
                 {pageCount > 1 ? (
@@ -124,7 +117,8 @@ export default {
                             'yma-pager__number': true,
                             'is-active': currentPage === pageCount,
                             'is-disabled': disabled,
-                        }}>
+                        }}
+                    >
                         {pageCount}
                     </li>
                 ) : null}

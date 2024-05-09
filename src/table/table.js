@@ -1,6 +1,6 @@
 import TableHeader from './table-header';
 import TableBody from './table-body';
-import TableBodyInput from './table-body-input'
+import TableBodyInput from './table-body-input';
 import {createStore, mapStates} from './store';
 
 let tableIdSeed = 0;
@@ -24,6 +24,7 @@ export default {
     computed: {
         ...mapStates({
             columns: 'columns',
+            fixedColumns: 'fixedColumns',
         }),
     },
     watch: {
@@ -50,7 +51,8 @@ export default {
                 class={{
                     'yma-table': true,
                     'yma-table--fixed': fixed,
-                }}>
+                }}
+            >
                 <div class='yma-table__hidden' ref='hiddenColumns'>
                     {$slots.default}
                 </div>

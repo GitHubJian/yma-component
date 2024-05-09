@@ -67,8 +67,8 @@ body {
 }
 
 .yma-desktop {
-    height: 100%;
     overflow: hidden;
+    height: 100%;
 }
 
 .yma-content {

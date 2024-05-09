@@ -21,7 +21,7 @@ export default {
 @import 'yma-csskit/bem.scss';
 
 @include b(header) {
-    box-sizing: border-box;
     flex-shrink: 0;
+    box-sizing: border-box;
 }
 </style>

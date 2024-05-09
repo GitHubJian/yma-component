@@ -18,35 +18,35 @@
 
 <script>
 export default {
-    name: "YmaPanel"
-}
+    name: 'YmaPanel',
+};
 </script>
 
 <style lang="scss">
 @import 'yma-csskit/bem.scss';
 
 @include b(panel) {
-    display: flex;
-    flex-direction: column;
-    padding: 20px 32px 20px 32px;
-    border-radius: 8px;
-    background: #FFFFFF;
-    gap: 12px;
-    overflow: hidden;
-    height: 100%;
-
     @include e(title) {
-        font-family: PingFang SC;
-        font-size: 16px;
+        color: var(---kd-color-text-primary, #0d0d0de5);
         font-weight: 600;
+        font-size: 16px;
+        font-family: PingFang SC;
         line-height: 24px;
         text-align: left;
-        color: var(---kd-color-text-primary, #0D0D0DE5);
     }
 
     @include e(body) {
         flex: 1;
         overflow: hidden;
     }
+
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    overflow: hidden;
+    height: 100%;
+    padding: 20px 32px 20px 32px;
+    border-radius: 8px;
+    background: #fff;
 }
 </style>

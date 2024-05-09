@@ -10,20 +10,20 @@
 
 <script>
 export default {
-    name: "YmaScroll",
-}
+    name: 'YmaScroll',
+};
 </script>
 
 <style lang="scss">
 @import "yma-csskit/bem.scss";
 
 @include b(scroll) {
-    height: 100%;
-    overflow: hidden;
-
     @include e(inner) {
-        height: 100%;
         overflow: auto;
+        height: 100%;
     }
+
+    overflow: hidden;
+    height: 100%;
 }
 </style>

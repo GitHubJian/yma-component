@@ -28,7 +28,6 @@
         position: relative;
         display: flex;
         background-color: #fff;
-        height: 49px;
     }
 
     @include e((th, td)) {
@@ -45,7 +44,6 @@
     }
 
     @include e(th) {
-        overflow: hidden;
         user-select: none;
         background-color: #fff;
 
@@ -62,8 +60,10 @@
         padding: 13px 16px;
         font-family: PingFang SC;
         font-size: 14px;
-        line-height: 22px;
+        line-height: 28px;
         color: var(---kd-color-text-primary, #0d0d0de5);
+        height: 54px;
+        box-sizing: border-box;
     }
 
     @include e(body) {

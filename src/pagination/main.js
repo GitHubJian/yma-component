@@ -20,12 +20,7 @@ export default {
         pagerCount: {
             type: Number,
             validator(value) {
-                return (
-                    (value | 0) === value &&
-                    value > 4 &&
-                    value < 22 &&
-                    value % 2 === 1
-                );
+                return (value | 0) === value && value > 4 && value < 22 && value % 2 === 1;
             },
             default: 7,
         },
@@ -43,8 +38,7 @@ export default {
         };
     },
     render(h) {
-        const {total, internalCurrentPage, internalPageCount, pagerCount} =
-            this;
+        const {total, internalCurrentPage, internalPageCount, pagerCount} = this;
 
         return (
             <div class='yma-pagination'>
@@ -53,11 +47,7 @@ export default {
                 </div>
                 <div class='yma-pagination__right'>
                     <Btn type='prev'></Btn>
-                    <Pager
-                        currentPage={internalCurrentPage}
-                        pageCount={internalPageCount}
-                        pagerCount={pagerCount}
-                    />
+                    <Pager currentPage={internalCurrentPage} pageCount={internalPageCount} pagerCount={pagerCount} />
                     <Btn type='next'></Btn>
 
                     <Jumper></Jumper>

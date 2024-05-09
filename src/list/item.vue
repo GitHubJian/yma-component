@@ -12,14 +12,14 @@
 
 <script>
 export default {
-    name: "YmaListItem",
+    name: 'YmaListItem',
     props: {
         title: {
             type: String,
-            required: true
+            required: true,
         },
     },
-}
+};
 </script>
 
 
@@ -37,27 +37,27 @@ export default {
             clear: both;
         }
 
-        &+& {
+        & + & {
             margin-top: 12px;
         }
     }
 
     @include e(item-left) {
         float: left;
-        font-family: PingFang SC;
-        font-size: 14px;
+        color: var(---kd-color-text-secondary, #0d0d0da8);
         font-weight: 400;
+        font-size: 14px;
+        font-family: PingFang SC;
         text-align: left;
-        color: var(---kd-color-text-secondary, #0D0D0DA8);
     }
 
     @include e(item-right) {
         float: right;
-        font-family: PingFang SC;
-        font-size: 18px;
+        color: #0d0d0de5;
         font-weight: 600;
+        font-size: 18px;
+        font-family: PingFang SC;
         text-align: center;
-        color: #0D0D0DE5;
     }
 }
 </style>

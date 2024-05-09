@@ -10,7 +10,7 @@
         <span class="yma-link__content">
             <span class="yma-link__inner">
                 <span v-if="icon" class="yma-link__icon">
-                    <yma-icon :name="icon" />
+                    <yma-icon :name="icon"/>
                 </span>
 
                 <span class="yma-link__text">
@@ -64,7 +64,7 @@ export default {
 
 @include b(link) {
     @include when(disabled) {
-        opacity: 0.3;
+        opacity: .3;
         cursor: not-allowed;
     }
 
@@ -75,29 +75,15 @@ export default {
 
     @include e(inner) {
         position: relative;
-        line-height: 22px;
         padding: 0 2px;
-    }
-
-    &:not(.is-disabled):hover {
-        @include e(inner) {
-            @include pseudo(after) {
-                content: '';
-                position: absolute;
-                right: 0;
-                bottom: 0;
-                left: 0;
-                height: 0;
-                border-bottom: 1px solid rgba(30, 95, 199, 1);
-            }
-        }
+        line-height: 22px;
     }
 
     @include e(icon) {
         width: 14px;
         height: 14px;
-        font-size: 0;
         margin-right: 8px;
+        font-size: 0;
     }
 
     @include e((icon, text)) {
@@ -118,5 +104,19 @@ export default {
     font-size: 14px;
     text-decoration: none;
     cursor: pointer;
+
+    &:not(.is-disabled):hover {
+        @include e(inner) {
+            @include pseudo(after) {
+                content: '';
+                position: absolute;
+                right: 0;
+                bottom: 0;
+                left: 0;
+                height: 0;
+                border-bottom: 1px solid rgba(30, 95, 199, 1);
+            }
+        }
+    }
 }
 </style>

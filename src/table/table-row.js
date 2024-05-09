@@ -2,15 +2,7 @@ import YmaTableAppend from './table-append';
 
 export default {
     name: 'YmaTableRow',
-    props: [
-        'columns',
-        'row',
-        'index',
-        'store',
-        'getTdClass',
-        'draggable',
-        'appendHandler',
-    ],
+    props: ['columns', 'row', 'index', 'store', 'getTdClass', 'draggable', 'appendHandler'],
     render(h) {
         const {columns, row, index: $index, draggable} = this;
 
@@ -21,7 +13,8 @@ export default {
                     'yma-table__tr': true,
                     'is-draggable': draggable,
                     'yma-dragsort__item': draggable,
-                }}>
+                }}
+            >
                 {columns.map(column => {
                     const columnData = {...column};
 
@@ -33,11 +26,7 @@ export default {
 
                     return (
                         <div class={['yma-table__td', this.getTdClass(column)]}>
-                            {column.renderCell.call(
-                                null,
-                                this.$createElement,
-                                data
-                            )}
+                            {column.renderCell.call(null, this.$createElement, data)}
                         </div>
                     );
                 })}

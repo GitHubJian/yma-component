@@ -5,7 +5,9 @@ export const getValueByPath = function (object, prop) {
     let result = null;
     for (let i = 0, j = paths.length; i < j; i++) {
         const path = paths[i];
-        if (!current) break;
+        if (!current) {
+            break;
+        }
 
         if (i === j - 1) {
             result = current[path];
@@ -25,15 +27,15 @@ export function getPropByPath(obj, path, strict) {
     let keyArr = path.split('.');
     let i = 0;
     for (let len = keyArr.length; i < len - 1; ++i) {
-        if (!tempObj && !strict) break;
+        if (!tempObj && !strict) {
+            break;
+        }
         let key = keyArr[i];
         if (key in tempObj) {
             tempObj = tempObj[key];
         } else {
             if (strict) {
-                throw new Error(
-                    'please transfer a valid prop path to form item!'
-                );
+                throw new Error('please transfer a valid prop path to form item!');
             }
             break;
         }
@@ -80,7 +82,7 @@ export function compose(...funcs) {
     return funcs.reduce(
         (a, b) =>
             (...args) =>
-                a(b(...args))
+                a(b(...args)),
     );
 }
 
@@ -109,12 +111,9 @@ function setStyles(el, styles) {
 
     function camelCase(name) {
         return name
-            .replace(
-                SPECIAL_CHARS_REGEXP,
-                function (_, separator, letter, offset) {
-                    return offset ? letter.toUpperCase() : letter;
-                }
-            )
+            .replace(SPECIAL_CHARS_REGEXP, function (_, separator, letter, offset) {
+                return offset ? letter.toUpperCase() : letter;
+            })
             .replace(MOZ_HACK_REGEXP, 'Moz$1');
     }
 
@@ -122,11 +121,7 @@ function setStyles(el, styles) {
         if (cssVarRE.test(name)) {
             el.style.setProperty(name, val);
         } else if (importantRE.test(val)) {
-            el.style.setProperty(
-                hyphenate(name),
-                val.replace(importantRE, ''),
-                'important'
-            );
+            el.style.setProperty(hyphenate(name), val.replace(importantRE, ''), 'important');
         } else {
             let normalizedName = camelCase(name);
             if (Array.isArray(val)) {
@@ -186,23 +181,27 @@ export function hasClass(el, cls) {
         return false;
     }
 
-    if (cls.indexOf(' ') !== -1)
+    if (cls.indexOf(' ') !== -1) {
         throw new Error('className should not contain space.');
+    }
     if (el.classList) {
         return el.classList.contains(cls);
-    } else {
-        return (' ' + el.className + ' ').indexOf(' ' + cls + ' ') > -1;
     }
+    return (' ' + el.className + ' ').indexOf(' ' + cls + ' ') > -1;
 }
 
 export function addClass(el, cls) {
-    if (!el) return;
-    var curClass = el.className;
-    var classes = (cls || '').split(' ');
+    if (!el) {
+        return;
+    }
+    let curClass = el.className;
+    let classes = (cls || '').split(' ');
 
-    for (var i = 0, j = classes.length; i < j; i++) {
-        var clsName = classes[i];
-        if (!clsName) continue;
+    for (let i = 0, j = classes.length; i < j; i++) {
+        let clsName = classes[i];
+        if (!clsName) {
+            continue;
+        }
 
         if (el.classList) {
             el.classList.add(clsName);
@@ -220,13 +219,17 @@ function trim(string) {
     return (string || '').replace(/^[\s\uFEFF]+|[\s\uFEFF]+$/g, '');
 }
 export function removeClass(el, cls) {
-    if (!el || !cls) return;
-    var classes = cls.split(' ');
-    var curClass = ' ' + el.className + ' ';
+    if (!el || !cls) {
+        return;
+    }
+    let classes = cls.split(' ');
+    let curClass = ' ' + el.className + ' ';
 
-    for (var i = 0, j = classes.length; i < j; i++) {
-        var clsName = classes[i];
-        if (!clsName) continue;
+    for (let i = 0, j = classes.length; i < j; i++) {
+        let clsName = classes[i];
+        if (!clsName) {
+            continue;
+        }
 
         if (el.classList) {
             el.classList.remove(clsName);
@@ -244,11 +247,7 @@ function isArrayLike(obj) {
     if (obj && typeof obj === 'object') {
         let length = obj.length;
 
-        return (
-            typeof length === 'number' &&
-            length >= 0 &&
-            Number.isInteger(length)
-        );
+        return typeof length === 'number' && length >= 0 && Number.isInteger(length);
     }
 
     return false;

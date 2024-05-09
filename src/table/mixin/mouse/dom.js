@@ -19,23 +19,27 @@ export function hasClass(el, cls) {
         return false;
     }
 
-    if (cls.indexOf(' ') !== -1)
+    if (cls.indexOf(' ') !== -1) {
         throw new Error('className should not contain space.');
+    }
     if (el.classList) {
         return el.classList.contains(cls);
-    } else {
-        return (' ' + el.className + ' ').indexOf(' ' + cls + ' ') > -1;
     }
+    return (' ' + el.className + ' ').indexOf(' ' + cls + ' ') > -1;
 }
 
 export function addClass(el, cls) {
-    if (!el) return;
-    var curClass = el.className;
-    var classes = (cls || '').split(' ');
+    if (!el) {
+        return;
+    }
+    let curClass = el.className;
+    let classes = (cls || '').split(' ');
 
-    for (var i = 0, j = classes.length; i < j; i++) {
-        var clsName = classes[i];
-        if (!clsName) continue;
+    for (let i = 0, j = classes.length; i < j; i++) {
+        let clsName = classes[i];
+        if (!clsName) {
+            continue;
+        }
 
         if (el.classList) {
             el.classList.add(clsName);
@@ -53,13 +57,17 @@ function trim(string) {
     return (string || '').replace(/^[\s\uFEFF]+|[\s\uFEFF]+$/g, '');
 }
 export function removeClass(el, cls) {
-    if (!el || !cls) return;
-    var classes = cls.split(' ');
-    var curClass = ' ' + el.className + ' ';
+    if (!el || !cls) {
+        return;
+    }
+    let classes = cls.split(' ');
+    let curClass = ' ' + el.className + ' ';
 
-    for (var i = 0, j = classes.length; i < j; i++) {
-        var clsName = classes[i];
-        if (!clsName) continue;
+    for (let i = 0, j = classes.length; i < j; i++) {
+        let clsName = classes[i];
+        if (!clsName) {
+            continue;
+        }
 
         if (el.classList) {
             el.classList.remove(clsName);
@@ -77,11 +85,7 @@ function isArrayLike(obj) {
     if (obj && typeof obj === 'object') {
         let length = obj.length;
 
-        return (
-            typeof length === 'number' &&
-            length >= 0 &&
-            Number.isInteger(length)
-        );
+        return typeof length === 'number' && length >= 0 && Number.isInteger(length);
     }
 
     return false;
@@ -124,10 +128,7 @@ function parseValue(arg) {
         return classnames.apply(null, arg);
     }
 
-    if (
-        arg.toString !== Object.prototype.toString &&
-        !arg.toString.toString().includes('[native code]')
-    ) {
+    if (arg.toString !== Object.prototype.toString && !arg.toString.toString().includes('[native code]')) {
         return arg.toString();
     }
 
@@ -177,12 +178,9 @@ export function setStyles(el, styles) {
 
     function camelCase(name) {
         return name
-            .replace(
-                SPECIAL_CHARS_REGEXP,
-                function (_, separator, letter, offset) {
-                    return offset ? letter.toUpperCase() : letter;
-                }
-            )
+            .replace(SPECIAL_CHARS_REGEXP, function (_, separator, letter, offset) {
+                return offset ? letter.toUpperCase() : letter;
+            })
             .replace(MOZ_HACK_REGEXP, 'Moz$1');
     }
 
@@ -190,11 +188,7 @@ export function setStyles(el, styles) {
         if (cssVarRE.test(name)) {
             el.style.setProperty(name, val);
         } else if (importantRE.test(val)) {
-            el.style.setProperty(
-                hyphenate(name),
-                val.replace(importantRE, ''),
-                'important'
-            );
+            el.style.setProperty(hyphenate(name), val.replace(importantRE, ''), 'important');
         } else {
             let normalizedName = camelCase(name);
             if (Array.isArray(val)) {
@@ -229,12 +223,9 @@ export function getStyle(el, styleName) {
 
     function camelCase(name) {
         return name
-            .replace(
-                SPECIAL_CHARS_REGEXP,
-                function (_, separator, letter, offset) {
-                    return offset ? letter.toUpperCase() : letter;
-                }
-            )
+            .replace(SPECIAL_CHARS_REGEXP, function (_, separator, letter, offset) {
+                return offset ? letter.toUpperCase() : letter;
+            })
             .replace(MOZ_HACK_REGEXP, 'Moz$1');
     }
 
@@ -244,7 +235,7 @@ export function getStyle(el, styleName) {
     }
 
     try {
-        var computed = document.defaultView.getComputedStyle(el, '');
+        let computed = document.defaultView.getComputedStyle(el, '');
         return el.style[styleName] || computed ? computed[styleName] : null;
     } catch (e) {
         return el.style[styleName];
@@ -307,9 +298,7 @@ export function setAttrs(el, attrs) {
 }
 
 function isPlainObject(val) {
-    return (
-        typeof val === 'object' && val !== null && val.constructor === Object
-    );
+    return typeof val === 'object' && val !== null && val.constructor === Object;
 }
 
 export function removeAttrs(el, attrs) {

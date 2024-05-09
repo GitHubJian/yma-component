@@ -1,3 +1,6 @@
 const requireAll = requireContext => requireContext.keys().map(requireContext);
-const req = require.context('@/asset/svg', false, /\.svg$/);
-requireAll(req);
+const reqAsset = require.context('@/asset/svg', false, /\.svg$/);
+requireAll(reqAsset);
+
+const reqLocal = require.context('./svg', false, /\.svg$/);
+requireAll(reqLocal);
