@@ -4,8 +4,7 @@
             'yma-link',
             disabled && 'is-disabled',
             underline && !disabled && 'is-underline',
-        ]"
-        @click="handleClick"
+        ]" @click="handleClick"
     >
         <span class="yma-link__content">
             <span class="yma-link__inner">
@@ -91,6 +90,19 @@ export default {
         vertical-align: middle;
     }
 
+    @include e(inner) {
+        @include pseudo(after) {
+            content: '';
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            height: 0;
+            border-bottom: 1px solid rgba(30, 95, 199, 1);
+            visibility: hidden;
+        }
+    }
+
     position: relative;
     display: inline-flex;
     vertical-align: middle;
@@ -105,16 +117,12 @@ export default {
     text-decoration: none;
     cursor: pointer;
 
-    &:not(.is-disabled):hover {
-        @include e(inner) {
-            @include pseudo(after) {
-                content: '';
-                position: absolute;
-                right: 0;
-                bottom: 0;
-                left: 0;
-                height: 0;
-                border-bottom: 1px solid rgba(30, 95, 199, 1);
+    &:not(.is-disabled) {
+        &.is-underline:hover {
+            @include e(inner) {
+                @include pseudo(after) {
+                    visibility: visible;
+                }
             }
         }
     }

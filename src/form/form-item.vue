@@ -40,7 +40,6 @@ export default {
             return this.for || this.prop;
         },
         labelStyle() {
-            debugger;
             const ret = {};
             if (this.form.labelPosition === 'top') {
                 return ret;

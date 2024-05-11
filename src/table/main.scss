@@ -66,6 +66,14 @@
         box-sizing: border-box;
     }
 
+    @include e((th, td)) {
+        @include when(selection) {
+            @include e(cell) {
+                font-size: 0;
+            }
+        }
+    }
+
     @include e(body) {
         @include e(tr) {
             border-width: 0 0 1px 0;
@@ -75,9 +83,23 @@
     }
 
     .yma-table__th {
-        .yma-table__cell {
-            font-weight: 600;
+        position: relative;
+
+        &:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             background: var(---kd-color-fill-light, #f5f5f5);
+            z-index: 1;
+        }
+
+        .yma-table__cell {
+            position: relative;
+            font-weight: 600;
+            z-index: 2;
         }
     }
 
@@ -89,11 +111,15 @@
 
     .yma-table__tr {
         .yma-table__th:first-child {
-            border-top-left-radius: 8px;
+            &::before {
+                border-top-left-radius: 8px;
+            }
         }
 
         .yma-table__th:last-child {
-            border-top-right-radius: 8px;
+            &::before {
+                border-top-right-radius: 8px;
+            }
         }
     }
 
@@ -206,5 +232,33 @@
         height: 100%;
         opacity: 0.5;
         background: #000;
+    }
+}
+
+@include b(table) {
+    @include m(empty) {
+        height: 100%;
+    }
+
+    @include e(empty) {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -60%);
+    }
+
+    @include e(empty-icon) {
+        margin: 0 auto;
+        width: 100px;
+        height: 100px;
+    }
+
+    @include e(empty-text) {
+        font-family: PingFang SC;
+        font-size: 16px;
+        font-weight: 600;
+        line-height: 24px;
+        text-align: center;
+        color: #0d0d0de5;
     }
 }

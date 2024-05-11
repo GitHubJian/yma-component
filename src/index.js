@@ -1,5 +1,7 @@
 import Breadcrumb from './breadcrumb';
 import Center from './center';
+import Checkbox from './checkbox';
+import Choice from './choice';
 import Col from './col';
 import Desktop from './desktop';
 import Dropdown from './dropdown';
@@ -18,6 +20,8 @@ import Text from './text';
 const components = [
     Breadcrumb,
     Center,
+    Checkbox,
+    Choice,
     Col,
     Desktop,
     Dropdown,
@@ -44,6 +48,8 @@ export default {
     install,
     Breadcrumb,
     Center,
+    Checkbox,
+    Choice,
     Col,
     Desktop,
     Dropdown,

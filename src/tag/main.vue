@@ -1,5 +1,10 @@
 <template>
-    <span :class="['yma-tag', 'yma-tag--' + type]" :style="style">
+    <span
+        :class="['yma-tag', 'yma-tag--' + type, {
+            'is-cursor': cursor
+        }]" :style="style"
+        @click="handleClick"
+    >
         <span class="yma-tag__inner">
             <slot></slot>
         </span>
@@ -10,6 +15,7 @@
 export default {
     name: 'YmaTag',
     props: {
+        cursor: Boolean,
         type: {
             tyle: String,
             default: 'default',
@@ -32,6 +38,15 @@ export default {
             return {
                 color: this.color,
             };
+        },
+    },
+    methods: {
+        handleClick(e) {
+            if (!this.disabled) {
+                if (!this.href) {
+                    this.$emit('click', e);
+                }
+            }
         },
     },
 };
@@ -57,10 +72,15 @@ export default {
         color: #c25010;
     }
 
+    @include when(cursor) {
+        cursor: pointer;
+    }
+
     color: #0d0d0de5;
     font-weight: 400;
     font-size: 14px;
     line-height: 22px;
     text-align: left;
+    user-select: none;
 }
 </style>

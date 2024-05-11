@@ -1,7 +1,7 @@
 import {mapStates} from './store';
 import TableRow from './table-row';
 import mousesort from './mixin/mouse';
-import {createElement, insertAfter} from './util';
+import {createElement, insertAfter, getRowIdentity} from './util';
 import TableBodyInput from './table-body-input';
 import {removeChild} from './mixin/mouse/dom';
 
@@ -21,6 +21,7 @@ export default {
             required: true,
         },
         draggable: Boolean,
+        addible: Boolean,
     },
     data() {
         return {
@@ -57,8 +58,15 @@ export default {
         }),
     },
     methods: {
+        getKeyOfRow(row, index) {
+            const rowKey = this.table.rowKey;
+            if (rowKey) {
+                return getRowIdentity(row, rowKey);
+            }
+            return index;
+        },
         rowRender(row, $index) {
-            const {columns, draggable} = this;
+            const {columns, draggable, addible} = this;
 
             return (
                 <TableRow
@@ -68,7 +76,9 @@ export default {
                     store={this.store}
                     getTdClass={this.getTdClass}
                     draggable={draggable}
+                    addible={addible}
                     appendHandler={this.appendHandler}
+                    isSelected={this.store.isSelected(row)}
                 />
             );
         },
@@ -93,8 +103,7 @@ export default {
             this.$nextTick(() => {
                 const store = this.table.store;
                 let data = store.states.data;
-                console.log(i);
-                debugger;
+
                 data.splice(i + 1, 0, d);
                 this.store.commit('setData', data);
             });

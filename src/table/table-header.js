@@ -22,6 +22,7 @@ export default {
 
         ...mapStates({
             columns: 'columns',
+            isAllSelected: 'isAllSelected',
         }),
     },
     watch: {
@@ -38,12 +39,15 @@ export default {
         this.store.commit('setHeaderHeight', rect.height);
     },
     methods: {
-        getCellClass(column) {
+        getThClass(column) {
             const classes = [];
 
             classes.push(column.align);
 
             return classes.join(' ');
+        },
+        toggleAllSelection() {
+            this.store.commit('toggleAllSelection');
         },
     },
     render(h) {
@@ -54,8 +58,20 @@ export default {
                 <div class='yma-table__thead'>
                     <div class='yma-table__tr'>
                         {columns.map((column, cellIndex) => {
+                            const thStyle = {};
+                            if (column.width) {
+                                thStyle.width = column.width + 'px';
+                                thStyle.flex = 'none';
+                            }
+
+                            let isSelection = column.type === 'selection';
+
                             return (
-                                <div class={['yma-table__th', this.getCellClass(column)]} key={'td_' + cellIndex}>
+                                <div
+                                    class={['yma-table__th', this.getThClass(column), {'is-selection': isSelection}]}
+                                    key={'td_' + cellIndex}
+                                    style={thStyle}
+                                >
                                     <div class='yma-table__cell'>
                                         {column.renderHeader
                                             ? column.renderHeader.call(this._renderProxy, h, {

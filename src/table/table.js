@@ -2,6 +2,7 @@ import TableHeader from './table-header';
 import TableBody from './table-body';
 import TableBodyInput from './table-body-input';
 import {createStore, mapStates} from './store';
+import YmaCheckbox from '../checkbox';
 
 let tableIdSeed = 0;
 export default {
@@ -11,6 +12,8 @@ export default {
             type: Array,
             default: () => [],
         },
+        draggable: Boolean,
+        addible: Boolean,
         emptyText: {
             default: '暂无数据',
         },
@@ -43,14 +46,20 @@ export default {
 
         this.$ready = true;
     },
+    methods: {
+        toggleAllSelection() {
+            this.store.commit('toggleAllSelection');
+        },
+    },
     render(h) {
-        const {store, $slots, data, fixed} = this;
+        const {store, $slots, data, fixed, draggable, addible} = this;
 
         return (
             <div
                 class={{
                     'yma-table': true,
                     'yma-table--fixed': fixed,
+                    'yma-table--empty': !data || data.length === 0,
                 }}
             >
                 <div class='yma-table__hidden' ref='hiddenColumns'>
@@ -62,14 +71,20 @@ export default {
                 </div>
 
                 <div ref='bodyWrapper' class='yma-table__body-wrapper'>
-                    <TableBody store={store} draggable={true} />
-
-                    {!data || data.length === 0 ? (
-                        <div class='yma-table__empty'>
-                            <span class='yma-table__empty-text'>暂无数据</span>
-                        </div>
-                    ) : null}
+                    <TableBody store={store} draggable={draggable} addible={addible} />
                 </div>
+
+                {!data || data.length === 0 ? (
+                    <div class='yma-table__empty-wrapper'>
+                        <div class='yma-table__empty'>
+                            <div class='yma-table__empty-icon'>
+                                <yma-icon name='blank-contents-empty' is-cover={true} />
+                            </div>
+
+                            <div class='yma-table__empty-text'>暂无数据</div>
+                        </div>
+                    </div>
+                ) : null}
             </div>
         );
     },

@@ -1,4 +1,5 @@
 import {getPropByPath, mergeOptions, compose, parseWidth} from './util';
+import {cellStarts, cellForced} from './config';
 function defaultRenderCell(h, {row, column, $index}) {
     const property = column.property;
     const value = property && getPropByPath(row, property).v;
@@ -12,6 +13,10 @@ let columnIdSeed = 0;
 export default {
     name: 'YmaTableColumn',
     props: {
+        type: {
+            type: String,
+            default: 'default',
+        },
         label: String,
         prop: String,
         width: String,
@@ -54,22 +59,24 @@ export default {
     created() {
         const parent = this.columnOrTableParent;
         this.columnId = (parent.tableId || parent.columnId) + '_column_' + columnIdSeed++;
+        const type = this.type || 'default';
 
         const defaults = {
+            ...cellStarts[type],
             id: this.columnId,
             index: this.index,
             property: this.prop,
             align: this.realAlign,
         };
 
-        const basicProps = ['label', 'className', 'fixed'];
+        const basicProps = ['label', 'className', 'fixed', 'type'];
 
         let column = this.getPropsData(basicProps);
         column = mergeOptions(defaults, column);
 
-        const chain = compose(this.setColumnRenders, this.setColumnWidth);
+        const chain = compose(this.setColumnRenders, this.setColumnWidth, this.setColumnForcedProps);
         column = chain(column);
-
+        debugger;
         this.columnConfig = column;
     },
     mounted() {
@@ -101,15 +108,27 @@ export default {
                 column.width = this.realWidth;
             }
 
-            column.realWidth = column.width === undefined ? 'auto' : column.width;
+            if (this.realMinWidth) {
+                column.minWidth = this.realMinWidth;
+            }
+
+            if (!column.minWidth) {
+                column.minWidth = 80;
+            }
+
+            column.realWidth = column.width === undefined ? column.minWidth : column.width;
 
             return column;
         },
         setColumnRenders(column) {
-            column.renderHeader = (h, scope) => {
-                const renderHeader = this.$scopedSlots.header;
-                return renderHeader ? renderHeader(scope) : column.label;
-            };
+            if (this.renderHeader) {
+                console.warn('推荐使用 scoped-slot header');
+            } else if (column.type !== 'selection' && column.type !== 'index') {
+                column.renderHeader = (h, scope) => {
+                    const renderHeader = this.$scopedSlots.header;
+                    return renderHeader ? renderHeader(scope) : column.label;
+                };
+            }
 
             const that = this;
             let originRenderCell = column.renderCell || defaultRenderCell;
@@ -130,6 +149,17 @@ export default {
                 return <div {...props}>{children}</div>;
             };
 
+            return column;
+        },
+        setColumnForcedProps(column) {
+            const type = column.type;
+            const source = cellForced[type] || {};
+            Object.keys(source).forEach(prop => {
+                let value = source[prop];
+                if (value !== undefined) {
+                    column[prop] = prop === 'className' ? `${column[prop]} ${value}` : value;
+                }
+            });
             return column;
         },
     },
