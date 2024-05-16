@@ -1,12 +1,12 @@
 import TableHeader from './table-header';
 import TableBody from './table-body';
-import TableBodyInput from './table-body-input';
 import {createStore, mapStates} from './store';
-import YmaCheckbox from '../checkbox';
+import emitter from '../helper/emitter';
 
 let tableIdSeed = 0;
 export default {
     name: 'YmaTable',
+    mixins: [emitter],
     props: {
         data: {
             type: Array,
@@ -17,6 +17,7 @@ export default {
         emptyText: {
             default: '暂无数据',
         },
+        rowSelectable: Boolean,
         fixed: Boolean,
     },
     data() {
@@ -50,9 +51,15 @@ export default {
         toggleAllSelection() {
             this.store.commit('toggleAllSelection');
         },
+        handleRowSelect(isActive, row, $index) {
+            this.broadcast('YmaTableRow', 'passive', [$index]);
+
+            this.$emit('select', isActive, row, $index);
+        },
     },
     render(h) {
-        const {store, $slots, data, fixed, draggable, addible} = this;
+        const {store, $slots, data, fixed, draggable, addible, rowSelectable} =
+            this;
 
         return (
             <div
@@ -60,8 +67,8 @@ export default {
                     'yma-table': true,
                     'yma-table--fixed': fixed,
                     'yma-table--empty': !data || data.length === 0,
-                }}
-            >
+                    'yma-table--row-selectable': rowSelectable,
+                }}>
                 <div class='yma-table__hidden' ref='hiddenColumns'>
                     {$slots.default}
                 </div>
@@ -71,14 +78,22 @@ export default {
                 </div>
 
                 <div ref='bodyWrapper' class='yma-table__body-wrapper'>
-                    <TableBody store={store} draggable={draggable} addible={addible} />
+                    <TableBody
+                        store={store}
+                        draggable={draggable}
+                        addible={addible}
+                        selectable={rowSelectable}
+                    />
                 </div>
 
                 {!data || data.length === 0 ? (
                     <div class='yma-table__empty-wrapper'>
                         <div class='yma-table__empty'>
                             <div class='yma-table__empty-icon'>
-                                <yma-icon name='blank-contents-empty' is-cover={true} />
+                                <yma-icon
+                                    name='blank-contents-empty'
+                                    is-cover={true}
+                                />
                             </div>
 
                             <div class='yma-table__empty-text'>暂无数据</div>

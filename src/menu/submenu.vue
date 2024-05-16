@@ -180,7 +180,7 @@ export default {
         box-sizing: border-box;
         height: 36px;
         padding: 10px 4px 10px 4px;
-        color: var(---kd-color-text-primary, #0d0d0de5);
+        color:  #0d0d0de5;
         font-weight: 400;
         font-size: 14px;
         font-family: PingFang SC;

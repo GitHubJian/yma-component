@@ -1,0 +1,23 @@
+@import 'yma-csskit/bem.scss';
+
+@include b(reader) {
+    display: inline-block;
+    background-color: #fbfdff;
+    border: 1px dashed #c0ccda;
+    border-radius: 8px;
+    box-sizing: border-box;
+    cursor: pointer;
+    vertical-align: top;
+    width: 148px;
+    height: 148px;
+
+    @include e(inner) {
+        width: 100%;
+        height: 100%;
+        display: flex;
+    }
+
+    @include e(input) {
+        display: none;
+    }
+}

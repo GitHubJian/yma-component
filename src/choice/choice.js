@@ -52,11 +52,33 @@ export default {
 
         this.initDomOperation();
 
-        const item = this.store.states.list.find(item => item.id === this.defaultActive);
+        const item = this.store.states.list.find(
+            item => item.id === this.defaultActive
+        );
 
         if (item) {
             this.label = item.label;
         }
+    },
+    watch: {
+        defaultActive(val) {
+            const item = this.store.states.list.find(
+                item => item.id === this.defaultActive
+            );
+
+            if (item) {
+                this.label = item.label;
+            }
+        },
+        'store.states.list'(val) {
+            const item = this.store.states.list.find(
+                item => item.id === this.defaultActive
+            );
+
+            if (item) {
+                this.label = item.label;
+            }
+        },
     },
     methods: {
         show() {
@@ -120,13 +142,18 @@ export default {
                     class={{
                         'yma-choice-trigger': true,
                         'is-active': visible,
-                    }}
-                >
+                    }}>
                     <span class='yma-choice-trigger__label'>{label}</span>
-                    <yma-icon class='yma-choice-trigger__icon' name='arrow_triangle_down' />
+                    <yma-icon
+                        class='yma-choice-trigger__icon'
+                        name='arrow_triangle_down'
+                    />
                 </div>
 
-                <div ref='popperEl' class='yma-choice-menu' style={{display: visible ? 'block' : 'none'}}>
+                <div
+                    ref='popperEl'
+                    class='yma-choice-menu'
+                    style={{display: visible ? 'block' : 'none'}}>
                     <yma-scroll>
                         <ul>
                             {list.map(function (item) {
@@ -138,9 +165,10 @@ export default {
                                         class={{
                                             'yma-choice-menu__item': true,
                                         }}
-                                        on-click={() => handleItemClick(id)}
-                                    >
-                                        <span class='yma-choice-menu__item-label'>{label}</span>
+                                        on-click={() => handleItemClick(id)}>
+                                        <span class='yma-choice-menu__item-label'>
+                                            {label}
+                                        </span>
                                     </li>
                                 );
                             })}

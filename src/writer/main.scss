@@ -1,0 +1,9 @@
+@import 'yma-csskit/bem.scss';
+
+@include b(writer) {
+    display: inline-block;
+
+    @include m(hidden) {
+        display: none;
+    }
+}

@@ -22,6 +22,7 @@ export default {
         },
         draggable: Boolean,
         addible: Boolean,
+        selectable: Boolean,
     },
     data() {
         return {
@@ -41,7 +42,10 @@ export default {
                     const bodyRect = body.getBoundingClientRect();
                     const tbodyRect = tbody.getBoundingClientRect();
 
-                    this.store.commit('needScroll', bodyRect.height < tbodyRect.height);
+                    this.store.commit(
+                        'needScroll',
+                        bodyRect.height < tbodyRect.height
+                    );
                 });
             },
             deep: true,
@@ -79,6 +83,7 @@ export default {
                     addible={addible}
                     appendHandler={this.appendHandler}
                     isSelected={this.store.isSelected(row)}
+                    selectable={this.selectable}
                 />
             );
         },
@@ -127,7 +132,11 @@ export default {
                 const refNodeRect = refNode.getBoundingClientRect();
 
                 this.top = parseInt(
-                    this.headerHeight + refNodeRect.top + refNodeRect.height - tbodyRect.top - scrollTop,
+                    this.headerHeight +
+                        refNodeRect.top +
+                        refNodeRect.height -
+                        tbodyRect.top -
+                        scrollTop
                 );
             });
         },
@@ -149,8 +158,7 @@ export default {
                     class={{
                         'yma-table__tbody': true,
                         'yma-dragsort': draggable,
-                    }}
-                >
+                    }}>
                     {data.reduce((acc, row) => {
                         return acc.concat(this.rowRender(row, acc.length));
                     }, [])}

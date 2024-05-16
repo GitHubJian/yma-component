@@ -3,11 +3,13 @@
         :class="{
             'yma-menu__item': true,
             'is-active': active,
-        }" @click="handleClick"
+        }"
+        @click="handleClick"
     >
         <div class="yma-menu__inner">
             <span class="yma-menu__icon">
-                <yma-icon :name="icon"/>
+                <yma-icon v-if="active" :name="icon + '-active'" />
+                <yma-icon v-else :name="icon" />
             </span>
             <span class="yma-menu__title">{{ title }}</span>
         </div>
@@ -15,13 +17,13 @@
 </template>
 
 <script>
-import emitter from '../helper/emitter';
-import mixin from './mixin';
-import YmaIcon from '../icon';
+import emitter from "../helper/emitter";
+import mixin from "./mixin";
+import YmaIcon from "../icon";
 
 export default {
-    name: 'YmaMenuItem',
-    componentName: 'YmaMenuItem',
+    name: "YmaMenuItem",
+    componentName: "YmaMenuItem",
     components: {
         YmaIcon,
     },
@@ -29,7 +31,7 @@ export default {
     props: {
         index: {
             default: null,
-            validator: val => typeof val === 'string' || val === null,
+            validator: (val) => typeof val === "string" || val === null,
         },
         disabled: Boolean,
         icon: {
@@ -48,8 +50,8 @@ export default {
     methods: {
         handleClick() {
             if (!this.disabled) {
-                this.dispatch('YmaMenu', 'item-click', this);
-                this.$emit('click', this);
+                this.dispatch("YmaMenu", "item-click", this);
+                this.$emit("click", this);
             }
         },
     },
@@ -79,7 +81,7 @@ export default {
         box-sizing: border-box;
         height: 36px;
         padding: 10px 4px 10px 22px;
-        color: var(---kd-color-text-primary, #0d0d0de5);
+        color: #0d0d0de5;
         font-weight: 400;
         font-size: 14px;
         font-family: PingFang SC;

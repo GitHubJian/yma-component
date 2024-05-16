@@ -12,7 +12,7 @@
 
 <script>
 export default {
-    name: 'YmaListItem',
+    name: "YmaListItem",
     props: {
         title: {
             type: String,
@@ -44,7 +44,7 @@ export default {
 
     @include e(item-left) {
         float: left;
-        color: var(---kd-color-text-secondary, #0d0d0da8);
+        color: #0d0d0da8;
         font-weight: 400;
         font-size: 14px;
         font-family: PingFang SC;

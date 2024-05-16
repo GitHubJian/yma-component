@@ -27,7 +27,7 @@ export default {
 
 @include b(panel) {
     @include e(title) {
-        color: var(---kd-color-text-primary, #0d0d0de5);
+        color:  #0d0d0de5;
         font-weight: 600;
         font-size: 16px;
         font-family: PingFang SC;

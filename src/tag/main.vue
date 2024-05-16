@@ -1,8 +1,14 @@
 <template>
     <span
-        :class="['yma-tag', 'yma-tag--' + type, {
-            'is-cursor': cursor
-        }]" :style="style"
+        :class="[
+            'yma-tag',
+            'yma-tag--' + type,
+            {
+                'is-cursor': disabled ? false : cursor,
+                'is-disabled': disabled,
+            },
+        ]"
+        :style="style"
         @click="handleClick"
     >
         <span class="yma-tag__inner">
@@ -13,19 +19,18 @@
 
 <script>
 export default {
-    name: 'YmaTag',
+    name: "YmaTag",
     props: {
         cursor: Boolean,
+        disabled: Boolean,
         type: {
             tyle: String,
-            default: 'default',
+            default: "default",
             validator(value) {
-                return [
-                    'default',
-                    'primary',
-                    'warning',
-                    'danger',
-                ].indexOf(value) > -1;
+                return (
+                    ["default", "primary", "warning", "danger"].indexOf(value) >
+                    -1
+                );
             },
         },
     },
@@ -44,7 +49,7 @@ export default {
         handleClick(e) {
             if (!this.disabled) {
                 if (!this.href) {
-                    this.$emit('click', e);
+                    this.$emit("click", e);
                 }
             }
         },
@@ -56,6 +61,11 @@ export default {
 @import "yma-csskit/bem.scss";
 
 @include b(tag) {
+    @include when(disabled) {
+        opacity: 0.3;
+        cursor: not-allowed;
+    }
+
     @include m(default) {
         color: #0d0d0de5;
     }

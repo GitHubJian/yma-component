@@ -59,7 +59,7 @@ export default {
     font-weight: 400;
     font-size: 14px;
     font-family: PingFang SC;
-    line-height: 22px;
+    line-height: 32px;
     text-align: left;
 
     &::after {

@@ -76,7 +76,7 @@ export default {
 
         const chain = compose(this.setColumnRenders, this.setColumnWidth, this.setColumnForcedProps);
         column = chain(column);
-        debugger;
+
         this.columnConfig = column;
     },
     mounted() {

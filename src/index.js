@@ -16,6 +16,8 @@ import Row from './row';
 import Table from './table';
 import Tag from './tag';
 import Text from './text';
+import Reader from './reader';
+import Writer from './writer';
 
 const components = [
     Breadcrumb,
@@ -36,6 +38,8 @@ const components = [
     Table,
     Tag,
     Text,
+    Reader,
+    Writer,
 ];
 
 const install = function (Vue) {
@@ -64,4 +68,6 @@ export default {
     Table,
     Tag,
     Text,
+    Reader,
+    Writer,
 };
