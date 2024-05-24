@@ -1,3 +1,5 @@
+import {write} from '../util';
+
 export default {
     name: 'YmaWriter',
     props: {
@@ -19,28 +21,8 @@ export default {
         return {};
     },
     methods: {
-        write({filename, filetype, content, callback}) {
-            const blob = new Blob([content], {type: filetype});
-            const url = URL.createObjectURL(blob);
-
-            const link = document.createElement('a');
-            link.href = url;
-            link.download = filename;
-
-            document.body.appendChild(link);
-            link.click();
-
-            document.body.removeChild(link);
-            URL.revokeObjectURL(url);
-
-            if (callback) {
-                return callback();
-            } else {
-                return Promise.resolve();
-            }
-        },
         clickHandler() {
-            this.write({
+            write({
                 filename: this.filename,
                 content: this.content,
                 filetype: this.filetype,

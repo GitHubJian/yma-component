@@ -7,6 +7,7 @@ export default {
             type: String,
             required: true,
         },
+        metadata: {},
     },
     data() {
         return {};
@@ -25,6 +26,7 @@ export default {
         this.config = {
             id: this.id,
             label: this.label,
+            metadata: this.metadata
         };
     },
     mounted() {

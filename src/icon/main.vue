@@ -6,25 +6,27 @@
                 'is-cover': isCover,
             },
             'yma-icon-' + name,
-        ]" :style="customStyle"
+        ]"
+        :style="customStyle"
     >
         <svg class="yma-icon__inner">
-            <use :xlink:href="href"/>
+            <use :xlink:href="href" />
         </svg>
     </span>
 </template>
 
 <script>
 export default {
-    name: 'YmaIcon',
+    name: "YmaIcon",
     props: {
         name: String,
         isCover: {
-            type: Boolean, default: false,
+            type: Boolean,
+            default: false,
         },
         size: {
             type: String,
-            default: '16px',
+            default: "16px",
         },
     },
     computed: {
@@ -47,7 +49,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import 'yma-csskit/bem.scss';
+@import "yma-csskit/bem.scss";
 
 @include b(icon) {
     @include when(cover) {
@@ -64,9 +66,11 @@ export default {
     width: 16px;
     height: 16px;
     font-size: 0;
+    vertical-align: middle;
 
-    & + span {
+    & + .yma-icon-next {
         display: inline-block;
+        vertical-align: middle;
     }
 }
 </style>

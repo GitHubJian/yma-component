@@ -51,6 +51,9 @@ export default {
         toggleAllSelection() {
             this.store.commit('toggleAllSelection');
         },
+        clearSelection() {
+            this.store.clearSelection();
+        },
         handleRowSelect(isActive, row, $index) {
             this.broadcast('YmaTableRow', 'passive', [$index]);
 

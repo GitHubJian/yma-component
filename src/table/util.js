@@ -1,3 +1,5 @@
+import {classnames} from './mixin/mouse/dom';
+
 export const getValueByPath = function (object, prop) {
     prop = prop || '';
     const paths = prop.split('.');
@@ -35,7 +37,9 @@ export function getPropByPath(obj, path, strict) {
             tempObj = tempObj[key];
         } else {
             if (strict) {
-                throw new Error('please transfer a valid prop path to form item!');
+                throw new Error(
+                    'please transfer a valid prop path to form item!'
+                );
             }
             break;
         }
@@ -82,7 +86,7 @@ export function compose(...funcs) {
     return funcs.reduce(
         (a, b) =>
             (...args) =>
-                a(b(...args)),
+                a(b(...args))
     );
 }
 
@@ -111,9 +115,12 @@ function setStyles(el, styles) {
 
     function camelCase(name) {
         return name
-            .replace(SPECIAL_CHARS_REGEXP, function (_, separator, letter, offset) {
-                return offset ? letter.toUpperCase() : letter;
-            })
+            .replace(
+                SPECIAL_CHARS_REGEXP,
+                function (_, separator, letter, offset) {
+                    return offset ? letter.toUpperCase() : letter;
+                }
+            )
             .replace(MOZ_HACK_REGEXP, 'Moz$1');
     }
 
@@ -121,7 +128,11 @@ function setStyles(el, styles) {
         if (cssVarRE.test(name)) {
             el.style.setProperty(name, val);
         } else if (importantRE.test(val)) {
-            el.style.setProperty(hyphenate(name), val.replace(importantRE, ''), 'important');
+            el.style.setProperty(
+                hyphenate(name),
+                val.replace(importantRE, ''),
+                'important'
+            );
         } else {
             let normalizedName = camelCase(name);
             if (Array.isArray(val)) {
@@ -247,7 +258,11 @@ function isArrayLike(obj) {
     if (obj && typeof obj === 'object') {
         let length = obj.length;
 
-        return typeof length === 'number' && length >= 0 && Number.isInteger(length);
+        return (
+            typeof length === 'number' &&
+            length >= 0 &&
+            Number.isInteger(length)
+        );
     }
 
     return false;

@@ -1,6 +1,6 @@
 {
     "name": "yma-component",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "基于 VUE 的 YMA 组件库",
     "main": "./src/index.js",
     "scripts": {},
@@ -8,6 +8,8 @@
     "author": "",
     "license": "ISC",
     "dependencies": {
-        "yma-csskit": "1.0.2"
+        "yma-csskit": "1.0.2",
+        "xlsx": "0.18.5",
+        "clipboard": "2.0.8"
     }
 }

@@ -18,6 +18,8 @@ import Tag from './tag';
 import Text from './text';
 import Reader from './reader';
 import Writer from './writer';
+import * as Util$ from './util';
+import Message from './message';
 
 const components = [
     Breadcrumb,
@@ -40,6 +42,7 @@ const components = [
     Text,
     Reader,
     Writer,
+    Message,
 ];
 
 const install = function (Vue) {
@@ -50,6 +53,7 @@ const install = function (Vue) {
 
 export default {
     install,
+
     Breadcrumb,
     Center,
     Checkbox,
@@ -70,4 +74,7 @@ export default {
     Text,
     Reader,
     Writer,
+    Message,
 };
+
+export const Util = Util$;

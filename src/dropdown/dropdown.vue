@@ -1,27 +1,30 @@
 <template>
     <div v-clickoutside="hide" class="yma-dropdown">
-        <div ref="triggerEl" :class="{ 'yma-dropdown-trigger': true, 'is-active': visible }">
+        <div
+            ref="triggerEl"
+            :class="{ 'yma-dropdown-trigger': true, 'is-active': visible }"
+        >
             <span class="yma-dropdown-trigger__label">{{ label }}</span>
-            <yma-icon class="yma-dropdown-trigger__icon" name="arrow_down_s"/>
+            <yma-icon class="yma-dropdown-trigger__icon" name="arrow_down_s" />
         </div>
         <slot name="dropdown"></slot>
     </div>
 </template>
 
 <script>
-import YmaIcon from '../icon';
-import clickoutside from '../helper/clickoutside';
-import emitter from '../helper/emitter';
+import YmaIcon from "../icon";
+import clickoutside from "../helper/clickoutside";
+import emitter from "../helper/emitter";
 
 function includeIn(aList, bList) {
-    return aList.every(a => bList.indexOf(a) > -1);
+    return aList.every((a) => bList.indexOf(a) > -1);
 }
 
 export default {
-    name: 'YmaDropdown',
-    componentName: 'YmaDropdown',
+    name: "YmaDropdown",
+    componentName: "YmaDropdown",
     mixins: [emitter],
-    directives: {clickoutside},
+    directives: { clickoutside },
     provide() {
         return {
             dropdown: this,
@@ -41,16 +44,28 @@ export default {
         },
         label: {
             type: String,
-            default: '菜单',
+            default: "菜单",
             required: true,
         },
         trigger: {
             type: String,
-            default: 'hover',
+            default: "hover",
         },
         disabled: {
             type: Boolean,
             default: false,
+        },
+        all: {
+            type: Boolean,
+            default: false,
+        },
+        allId: {
+            type: String,
+            default: "-1",
+        },
+        allLabel: {
+            type: String,
+            default: "全部",
         },
     },
     data() {
@@ -64,9 +79,9 @@ export default {
         };
     },
     mounted() {
-        this.$on('menu-item-click', this.handleMenuItemClick);
+        this.$on("menu-item-click", this.handleMenuItemClick);
 
-        this.broadcast('YmaDropdownMenuItem', 'triggerActive', [
+        this.broadcast("YmaDropdownMenuItem", "triggerActive", [
             this.defaultActive,
         ]);
 
@@ -74,11 +89,11 @@ export default {
     },
     watch: {
         visible(val) {
-            this.broadcast('YmaDropdownMenu', 'visible', val);
-            this.$emit('visible-change', val);
+            this.broadcast("YmaDropdownMenu", "visible", val);
+            this.$emit("visible-change", val);
         },
         defaultActive(newList) {
-            this.broadcast('YmaDropdownMenuItem', 'triggerActive', [newList]);
+            this.broadcast("YmaDropdownMenuItem", "triggerActive", [newList]);
 
             this.innerActive = this.defaultActive;
         },
@@ -111,43 +126,38 @@ export default {
 
             if (this.visible) {
                 this.hide();
-            }
-            else {
+            } else {
                 this.show();
             }
         },
         initEvent() {
-            let {trigger, show, hide, handleClick} = this;
+            let { trigger, show, hide, handleClick } = this;
 
             this.triggerEl = this.$refs.triggerEl;
 
             let dropdownEl = this.dropdownEl;
 
-            if (trigger === 'hover') {
-                this.triggerEl.addEventListener('mouseenter', show);
-                this.triggerEl.addEventListener('mouseleave', hide);
-                dropdownEl.addEventListener('mouseenter', show);
-                dropdownEl.addEventListener('mouseleave', hide);
-            }
-            else if (trigger === 'click') {
-                this.triggerEl.addEventListener('click', handleClick);
+            if (trigger === "hover") {
+                this.triggerEl.addEventListener("mouseenter", show);
+                this.triggerEl.addEventListener("mouseleave", hide);
+                dropdownEl.addEventListener("mouseenter", show);
+                dropdownEl.addEventListener("mouseleave", hide);
+            } else if (trigger === "click") {
+                this.triggerEl.addEventListener("click", handleClick);
             }
         },
         handleMenuItemClick(id, isActive) {
-            if (id === '-1') {
+            if (id === "-1") {
                 if (isActive) {
-                    this.innerActive = [...this.allActive, '-1'];
-                }
-                else {
+                    this.innerActive = [...this.allActive, "-1"];
+                } else {
                     this.innerActive = [];
                 }
-            }
-            else {
+            } else {
                 if (isActive) {
                     if (!this.multiple) {
                         this.innerActive = [id];
-                    }
-                    else {
+                    } else {
                         const newInnerActive = Array.from(
                             new Set([...this.innerActive, id])
                         );
@@ -160,21 +170,20 @@ export default {
                             Array.from(new Set(this.innerActive))
                         )
                     ) {
-                        this.innerActive = [...this.allActive, '-1'];
+                        this.innerActive = [...this.allActive, "-1"];
                     }
-                }
-                else {
+                } else {
                     this.innerActive = this.innerActive.filter(
-                        c => c != id && c != '-1'
+                        (c) => c != id && c != "-1"
                     );
                 }
             }
 
-            this.broadcast('YmaDropdownMenuItem', 'triggerActive', [
+            this.broadcast("YmaDropdownMenuItem", "triggerActive", [
                 this.innerActive,
             ]);
 
-            this.$emit('change', this.innerActive);
+            this.$emit("change", this.innerActive);
         },
         initDomOperation() {
             this.dropdownEl = this.popperEl;
@@ -182,7 +191,7 @@ export default {
             this.initEvent();
         },
         updateActive(id) {
-            if (id !== '-1') {
+            if (id !== "-1") {
                 this.allActive.push(id);
             }
         },
@@ -191,7 +200,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import 'yma-csskit/bem.scss';
+@import "yma-csskit/bem.scss";
 
 @include b(dropdown) {
     position: relative;

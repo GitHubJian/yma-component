@@ -71,6 +71,15 @@ const Store = Vue.extend({
             const {selection = []} = this.states;
             return selection.indexOf(row) > -1;
         },
+        clearSelection() {
+            const states = this.states;
+            states.isAllSelected = false;
+            const oldSelection = states.selection;
+            if (oldSelection.length) {
+                states.selection = [];
+                this.table.$emit('selection-change', []);
+            }
+        },
         toggleRowSelection(row, selected, emitChange = true) {
             const changed = toggleRowStatus(
                 this.states.selection,

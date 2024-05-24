@@ -1,20 +1,25 @@
 <template>
     <ul v-show="showPopper" class="yma-dropdown-menu">
         <yma-dropdown-menu-item
-            v-if="isShowAll" id="-1"
-            label="全部"
+            v-if="isShowAll"
+            :id="allId"
+            :label="allLabel"
         />
         <slot></slot>
     </ul>
 </template>
 
 <script>
-import YmaDropdownMenuItem from './dropdown-item.vue';
+import YmaDropdownMenuItem from "./dropdown-item.vue";
+
+function isNil(val) {
+    return val === null || val === undefined;
+}
 
 export default {
-    name: 'YmaDropdownMenu',
-    componentName: 'YmaDropdownMenu',
-    inject: ['dropdown'],
+    name: "YmaDropdownMenu",
+    componentName: "YmaDropdownMenu",
+    inject: ["dropdown"],
     components: {
         YmaDropdownMenuItem,
     },
@@ -30,13 +35,19 @@ export default {
         };
     },
     created() {
-        this.$on('visible', val => {
+        this.$on("visible", (val) => {
             this.showPopper = val;
         });
     },
     computed: {
         isShowAll() {
-            return this.dropdown.multiple && this.all;
+            return this.dropdown.all;
+        },
+        allId() {
+            return String(this.dropdown.allId);
+        },
+        allLabel() {
+            return this.dropdown.allLabel;
         },
     },
     mounted() {
@@ -45,12 +56,11 @@ export default {
 
         this.dropdown.initDomOperation();
     },
-
 };
 </script>
 
 <style lang="scss">
-@import 'yma-csskit/bem.scss';
+@import "yma-csskit/bem.scss";
 
 @include b(dropdown-menu) {
     position: absolute;
@@ -59,9 +69,9 @@ export default {
     z-index: 20;
     width: 210px;
     padding: 12px 12px;
-    border: 1px solid rgba(13, 13, 13, .12);
+    border: 1px solid rgba(13, 13, 13, 0.12);
     border-radius: 8px;
     background: #fff;
-    box-shadow: 0 12px 32px 0 rgba(13, 13, 13, .08);
+    box-shadow: 0 12px 32px 0 rgba(13, 13, 13, 0.08);
 }
 </style>

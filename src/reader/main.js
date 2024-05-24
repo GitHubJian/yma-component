@@ -15,6 +15,13 @@ export default {
                 return ['*'];
             },
         },
+        type: {
+            type: String,
+            default: 'text',
+            validator: val => {
+                return ['buffer', 'text'].indexOf(val) > -1;
+            },
+        },
     },
     data() {
         return {
@@ -40,7 +47,11 @@ export default {
             e.target.value = '';
             this.file = file;
 
-            reader.readAsText(file);
+            if (this.type === 'text') {
+                reader.readAsText(file);
+            } else if (this.type === 'buffer') {
+                reader.readAsArrayBuffer(file);
+            }
         },
         clickHandler() {
             this.$refs.input.click();
@@ -62,7 +73,10 @@ export default {
             <div class='yma-reader'>
                 <div class='yma-reader__inner' on-click={this.clickHandler}>
                     <yma-center align='center'>
-                        <yma-icon name='symbol_cross'></yma-icon>
+                        <span class='yma-reader__logo'>
+                            <yma-icon name='symbol_cross'></yma-icon>
+                            <span class='yma-reader__text'>选择文件</span>
+                        </span>
                     </yma-center>
                 </div>
 
