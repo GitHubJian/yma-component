@@ -4,7 +4,9 @@
             'yma-link',
             disabled && 'is-disabled',
             underline && !disabled && 'is-underline',
-        ]" @click="handleClick"
+            'yma-link--' + type,
+        ]"
+        @click="handleClick"
     >
         <span class="yma-link__content">
             <span class="yma-link__inner">
@@ -42,6 +44,17 @@ export default {
         disabled: Boolean,
         href: String,
         icon: String,
+        type: {
+            tyle: String,
+            default: 'default',
+            validator(value) {
+                return (
+                    ['default', 'info', 'success', 'danger', 'warning'].indexOf(
+                        value
+                    ) > -1
+                );
+            },
+        },
     },
     data() {
         return {};
@@ -59,7 +72,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import 'yma-csskit/bem.scss';
+@import "yma-csskit/bem.scss";
 
 @include b(link) {
     @include when(disabled) {
@@ -75,7 +88,6 @@ export default {
     @include e(inner) {
         position: relative;
         padding: 0 2px;
-        line-height: 22px;
     }
 
     @include e(icon) {
@@ -90,9 +102,14 @@ export default {
         vertical-align: middle;
     }
 
+    @include e(text) {
+        font-weight: 400;
+        font-size: 14px;
+    }
+
     @include e(inner) {
         @include pseudo(after) {
-            content: '';
+            content: "";
             position: absolute;
             right: 0;
             bottom: 0;
@@ -101,6 +118,46 @@ export default {
             border-bottom: 1px solid rgba(30, 95, 199, 1);
             visibility: hidden;
         }
+    }
+
+    @include m(info) {
+        @include e(inner) {
+            @include pseudo(after) {
+                border-bottom-color: rgba(31, 105, 224, 1);
+            }
+        }
+
+        color: rgba(31, 105, 224, 1);
+    }
+
+    @include m(success) {
+        @include e(inner) {
+            @include pseudo(after) {
+                border-bottom-color: rgba(65, 143, 31, 1);
+            }
+        }
+
+        color: rgba(65, 143, 31, 1);
+    }
+
+    @include m(danger) {
+        @include e(inner) {
+            @include pseudo(after) {
+                border-bottom-color: rgba(221, 51, 50, 1);
+            }
+        }
+
+        color: rgba(221, 51, 50, 1);
+    }
+
+    @include m(warning) {
+        @include e(inner) {
+            @include pseudo(after) {
+                border-bottom-color: rgba(226, 101, 26, 1);
+            }
+        }
+
+        color: rgba(226, 101, 26, 1);
     }
 
     position: relative;
@@ -112,8 +169,7 @@ export default {
     padding: 0;
     color: rgba(30, 95, 199, 1);
     outline: none;
-    font-weight: 400;
-    font-size: 14px;
+    font-size: 0;
     text-decoration: none;
     cursor: pointer;
 

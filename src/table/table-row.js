@@ -8,7 +8,7 @@ export default {
         'row',
         'index',
         'store',
-        'getTdClass',
+        'getCellClass',
         'draggable',
         'addible',
         'appendHandler',
@@ -37,28 +37,19 @@ export default {
         });
     },
     render(h) {
-        const {
-            columns,
-            row,
-            index: $index,
-            draggable,
-            addible,
-            store,
-            isSelected,
-            isActive,
-        } = this;
+        const {columns, row, index: $index, draggable, addible, store, isSelected, isActive} = this;
 
         return (
             <div
                 ref='tr'
                 class={{
-                    'yma-table__tr': true,
                     'is-draggable': draggable,
                     'yma-dragsort__item': draggable,
                     'is-active': isActive,
                 }}
-                on-click={() => this.selectHandler(row, $index)}>
-                {columns.map(column => {
+                on-click={() => this.selectHandler(row, $index)}
+            >
+                {columns.map((column, cellIndex) => {
                     const columnData = {...column};
 
                     const tdStyle = {};
@@ -81,17 +72,14 @@ export default {
                         <div
                             class={[
                                 'yma-table__td',
-                                this.getTdClass(column),
+                                this.getCellClass($index, cellIndex, row, column),
                                 {
                                     'is-selection': isSelection,
                                 },
                             ]}
-                            style={tdStyle}>
-                            {column.renderCell.call(
-                                null,
-                                this.$createElement,
-                                data
-                            )}
+                            style={tdStyle}
+                        >
+                            {column.renderCell.call(null, this.$createElement, data)}
                         </div>
                     );
                 })}

@@ -20,6 +20,8 @@ export default {
         store: {
             required: true,
         },
+        rowClassName: [String, Function],
+
         draggable: Boolean,
         addible: Boolean,
         selectable: Boolean,
@@ -42,10 +44,7 @@ export default {
                     const bodyRect = body.getBoundingClientRect();
                     const tbodyRect = tbody.getBoundingClientRect();
 
-                    this.store.commit(
-                        'needScroll',
-                        bodyRect.height < tbodyRect.height
-                    );
+                    this.store.commit('needScroll', bodyRect.height < tbodyRect.height);
                 });
             },
             deep: true,
@@ -69,16 +68,41 @@ export default {
             }
             return index;
         },
+        getRowClass(row, rowIndex) {
+            const classes = ['yma-table__tr'];
+            const rowClassName = this.table.rowClassName;
+            if (typeof rowClassName === 'string') {
+                classes.push(rowClassName);
+            } else if (typeof rowClassName === 'function') {
+                classes.push(
+                    rowClassName.call(null, {
+                        row,
+                        rowIndex,
+                    }),
+                );
+            }
+
+            return classes;
+        },
+        getCellClass(rowIndex, columnIndex, row, column) {
+            const classes = [column.id, column.align, column.className];
+
+            classes.push('yma-tabel__cell');
+
+            return classes.join(' ');
+        },
         rowRender(row, $index) {
             const {columns, draggable, addible} = this;
+            const rowClasses = this.getRowClass(row, $index);
 
             return (
                 <TableRow
+                    class={rowClasses}
                     columns={columns}
                     row={row}
                     index={$index}
                     store={this.store}
-                    getTdClass={this.getTdClass}
+                    getCellClass={this.getCellClass}
                     draggable={draggable}
                     addible={addible}
                     appendHandler={this.appendHandler}
@@ -86,13 +110,6 @@ export default {
                     selectable={this.selectable}
                 />
             );
-        },
-        getTdClass(column) {
-            const classes = [];
-
-            classes.push(column.align);
-
-            return classes.join(' ');
         },
         updateData(newIndex, oldIndex) {
             this.$nextTick(() => {
@@ -132,11 +149,7 @@ export default {
                 const refNodeRect = refNode.getBoundingClientRect();
 
                 this.top = parseInt(
-                    this.headerHeight +
-                        refNodeRect.top +
-                        refNodeRect.height -
-                        tbodyRect.top -
-                        scrollTop
+                    this.headerHeight + refNodeRect.top + refNodeRect.height - tbodyRect.top - scrollTop,
                 );
             });
         },
@@ -158,10 +171,11 @@ export default {
                     class={{
                         'yma-table__tbody': true,
                         'yma-dragsort': draggable,
-                    }}>
-                    {data.reduce((acc, row) => {
-                        return acc.concat(this.rowRender(row, acc.length));
-                    }, [])}
+                    }}
+                >
+                    {data.map((row, index) => {
+                        return this.rowRender(row, index);
+                    })}
                 </div>
 
                 <TableBodyInput

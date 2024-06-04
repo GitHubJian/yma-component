@@ -28,6 +28,10 @@ export default {
             type: String,
             default: 'hover',
         },
+        disabled: {
+            type: Boolean,
+            default: false,
+        },
     },
     data() {
         const store = createStore(this);
@@ -52,9 +56,7 @@ export default {
 
         this.initDomOperation();
 
-        const item = this.store.states.list.find(
-            item => item.id === this.defaultActive
-        );
+        const item = this.store.states.list.find(item => item.id === this.defaultActive);
 
         if (item) {
             this.label = item.label;
@@ -62,18 +64,14 @@ export default {
     },
     watch: {
         defaultActive(val) {
-            const item = this.store.states.list.find(
-                item => item.id === this.defaultActive
-            );
+            const item = this.store.states.list.find(item => item.id === this.defaultActive);
 
             if (item) {
                 this.label = item.label;
             }
         },
         'store.states.list'(val) {
-            const item = this.store.states.list.find(
-                item => item.id === this.defaultActive
-            );
+            const item = this.store.states.list.find(item => item.id === this.defaultActive);
 
             if (item) {
                 this.label = item.label;
@@ -103,17 +101,19 @@ export default {
         initEvent() {
             let {trigger, show, hide, handleClick} = this;
 
-            this.triggerEl = this.$refs.triggerEl;
+            if (!this.disabled) {
+                this.triggerEl = this.$refs.triggerEl;
 
-            let choiceEl = this.choiceEl;
+                let choiceEl = this.choiceEl;
 
-            if (trigger === 'hover') {
-                this.triggerEl.addEventListener('mouseenter', show);
-                this.triggerEl.addEventListener('mouseleave', hide);
-                choiceEl.addEventListener('mouseenter', show);
-                choiceEl.addEventListener('mouseleave', hide);
-            } else if (trigger === 'click') {
-                this.triggerEl.addEventListener('click', handleClick);
+                if (trigger === 'hover') {
+                    this.triggerEl.addEventListener('mouseenter', show);
+                    this.triggerEl.addEventListener('mouseleave', hide);
+                    choiceEl.addEventListener('mouseenter', show);
+                    choiceEl.addEventListener('mouseleave', hide);
+                } else if (trigger === 'click') {
+                    this.triggerEl.addEventListener('click', handleClick);
+                }
             }
         },
         handleItemClick(id) {
@@ -131,50 +131,53 @@ export default {
         },
     },
     render() {
-        const {$slots, visible, label, store, handleItemClick} = this;
+        const {$slots, visible, label, store, handleItemClick, disabled} = this;
         const list = store.states.list;
 
         return (
-            <div class='yma-choice' v-clickoutside={this.hide}>
+            <div
+                class={{
+                    'yma-choice': true,
+                    'is-disabled': disabled,
+                }}
+                v-clickoutside={this.hide}
+            >
                 <div class='yma-choice__hidden'>{$slots.default}</div>
                 <div
                     ref='triggerEl'
                     class={{
                         'yma-choice-trigger': true,
                         'is-active': visible,
-                    }}>
+                    }}
+                >
                     <span class='yma-choice-trigger__label'>{label}</span>
-                    <yma-icon
-                        class='yma-choice-trigger__icon'
-                        name='arrow_triangle_down'
-                    />
+
+                    {disabled ? null : <yma-icon class='yma-choice-trigger__icon' name='arrow_triangle_down' />}
                 </div>
 
-                <div
-                    ref='popperEl'
-                    class='yma-choice-menu'
-                    style={{display: visible ? 'block' : 'none'}}>
-                    <yma-scroll>
-                        <ul>
-                            {list.map(function (item) {
-                                const {id, label} = item;
+                {disabled ? null : (
+                    <div ref='popperEl' class='yma-choice-menu' style={{display: visible ? 'block' : 'none'}}>
+                        <yma-scroll>
+                            <ul>
+                                {list.map(function (item) {
+                                    const {id, label} = item;
 
-                                return (
-                                    <li
-                                        key={id}
-                                        class={{
-                                            'yma-choice-menu__item': true,
-                                        }}
-                                        on-click={() => handleItemClick(id)}>
-                                        <span class='yma-choice-menu__item-label'>
-                                            {label}
-                                        </span>
-                                    </li>
-                                );
-                            })}
-                        </ul>
-                    </yma-scroll>
-                </div>
+                                    return (
+                                        <li
+                                            key={id}
+                                            class={{
+                                                'yma-choice-menu__item': true,
+                                            }}
+                                            on-click={() => handleItemClick(id)}
+                                        >
+                                            <span class='yma-choice-menu__item-label'>{label}</span>
+                                        </li>
+                                    );
+                                })}
+                            </ul>
+                        </yma-scroll>
+                    </div>
+                )}
             </div>
         );
     },

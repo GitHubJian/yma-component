@@ -18,6 +18,7 @@ export default {
             default: 'default',
         },
         label: String,
+        className: String,
         prop: String,
         width: String,
         align: String,
@@ -78,6 +79,8 @@ export default {
         column = chain(column);
 
         this.columnConfig = column;
+
+        this.registerNormalWatchers();
     },
     mounted() {
         const owner = this.owner;
@@ -120,6 +123,17 @@ export default {
 
             return column;
         },
+        setColumnForcedProps(column) {
+            const type = column.type;
+            const source = cellForced[type] || {};
+            Object.keys(source).forEach(prop => {
+                let value = source[prop];
+                if (value !== undefined) {
+                    column[prop] = prop === 'className' ? `${column[prop]} ${value}` : value;
+                }
+            });
+            return column;
+        },
         setColumnRenders(column) {
             if (this.renderHeader) {
                 console.warn('推荐使用 scoped-slot header');
@@ -151,16 +165,22 @@ export default {
 
             return column;
         },
-        setColumnForcedProps(column) {
-            const type = column.type;
-            const source = cellForced[type] || {};
-            Object.keys(source).forEach(prop => {
-                let value = source[prop];
-                if (value !== undefined) {
-                    column[prop] = prop === 'className' ? `${column[prop]} ${value}` : value;
-                }
+        registerNormalWatchers() {
+            const props = ['label'];
+
+            const aliases = {};
+            const allAliases = props.reduce((prev, cur) => {
+                prev[cur] = cur;
+                return prev;
+            }, aliases);
+
+            Object.keys(allAliases).forEach(key => {
+                const columnKey = aliases[key];
+
+                this.$watch(key, newVal => {
+                    this.columnConfig[columnKey] = newVal;
+                });
             });
-            return column;
         },
     },
     render(h) {

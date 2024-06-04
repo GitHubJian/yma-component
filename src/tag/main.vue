@@ -19,17 +19,17 @@
 
 <script>
 export default {
-    name: "YmaTag",
+    name: 'YmaTag',
     props: {
         cursor: Boolean,
         disabled: Boolean,
         type: {
             tyle: String,
-            default: "default",
+            default: 'default',
             validator(value) {
                 return (
-                    ["default", "primary", "warning", "danger"].indexOf(value) >
-                    -1
+                    ['default', 'primary', 'warning', 'danger'].indexOf(value)
+                    > -1
                 );
             },
         },
@@ -49,7 +49,7 @@ export default {
         handleClick(e) {
             if (!this.disabled) {
                 if (!this.href) {
-                    this.$emit("click", e);
+                    this.$emit('click', e);
                 }
             }
         },
@@ -62,7 +62,7 @@ export default {
 
 @include b(tag) {
     @include when(disabled) {
-        opacity: 0.3;
+        opacity: .3;
         cursor: not-allowed;
     }
 

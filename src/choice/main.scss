@@ -7,6 +7,14 @@
     z-index: 20;
 }
 
+@include b(choice) {
+    @include when(disabled) {
+        .yma-choice-trigger {
+            cursor: default;
+        }
+    }
+}
+
 @include b(choice-trigger) {
     display: inline-block;
     width: 180px;

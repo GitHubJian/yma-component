@@ -36,7 +36,8 @@ export default {
                     'yma-writer': true,
                     'yma-writer--hidden': !this.visible,
                 }}
-                on-click={this.clickHandler}>
+                on-click={this.clickHandler}
+            >
                 <slot></slot>
             </div>
         );

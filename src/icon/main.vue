@@ -10,14 +10,14 @@
         :style="customStyle"
     >
         <svg class="yma-icon__inner">
-            <use :xlink:href="href" />
+            <use :xlink:href="href"/>
         </svg>
     </span>
 </template>
 
 <script>
 export default {
-    name: "YmaIcon",
+    name: 'YmaIcon',
     props: {
         name: String,
         isCover: {
@@ -26,7 +26,7 @@ export default {
         },
         size: {
             type: String,
-            default: "16px",
+            default: '16px',
         },
     },
     computed: {
@@ -63,10 +63,10 @@ export default {
     }
 
     display: inline-block;
+    vertical-align: middle;
     width: 16px;
     height: 16px;
     font-size: 0;
-    vertical-align: middle;
 
     & + .yma-icon-next {
         display: inline-block;

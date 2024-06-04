@@ -10,16 +10,16 @@
 </template>
 
 <script>
-import YmaDropdownMenuItem from "./dropdown-item.vue";
+import YmaDropdownMenuItem from './dropdown-item.vue';
 
 function isNil(val) {
     return val === null || val === undefined;
 }
 
 export default {
-    name: "YmaDropdownMenu",
-    componentName: "YmaDropdownMenu",
-    inject: ["dropdown"],
+    name: 'YmaDropdownMenu',
+    componentName: 'YmaDropdownMenu',
+    inject: ['dropdown'],
     components: {
         YmaDropdownMenuItem,
     },
@@ -35,7 +35,7 @@ export default {
         };
     },
     created() {
-        this.$on("visible", (val) => {
+        this.$on('visible', val => {
             this.showPopper = val;
         });
     },
@@ -69,9 +69,9 @@ export default {
     z-index: 20;
     width: 210px;
     padding: 12px 12px;
-    border: 1px solid rgba(13, 13, 13, 0.12);
+    border: 1px solid rgba(13, 13, 13, .12);
     border-radius: 8px;
     background: #fff;
-    box-shadow: 0 12px 32px 0 rgba(13, 13, 13, 0.08);
+    box-shadow: 0 12px 32px 0 rgba(13, 13, 13, .08);
 }
 </style>

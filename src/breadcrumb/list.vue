@@ -43,6 +43,10 @@ export default {
     }
 
     @include e(inner) {
+        @include when(link) {
+            cursor: pointer;
+        }
+
         display: inline-block;
         vertical-align: middle;
     }

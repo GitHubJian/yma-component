@@ -8,8 +8,8 @@
     >
         <div class="yma-menu__inner">
             <span class="yma-menu__icon">
-                <yma-icon v-if="active" :name="icon + '-active'" />
-                <yma-icon v-else :name="icon" />
+                <yma-icon v-if="active" :name="icon + '-active'"/>
+                <yma-icon v-else :name="icon"/>
             </span>
             <span class="yma-menu__title">{{ title }}</span>
         </div>
@@ -17,13 +17,13 @@
 </template>
 
 <script>
-import emitter from "../helper/emitter";
-import mixin from "./mixin";
-import YmaIcon from "../icon";
+import emitter from '../helper/emitter';
+import mixin from './mixin';
+import YmaIcon from '../icon';
 
 export default {
-    name: "YmaMenuItem",
-    componentName: "YmaMenuItem",
+    name: 'YmaMenuItem',
+    componentName: 'YmaMenuItem',
     components: {
         YmaIcon,
     },
@@ -31,7 +31,7 @@ export default {
     props: {
         index: {
             default: null,
-            validator: (val) => typeof val === "string" || val === null,
+            validator: val => typeof val === 'string' || val === null,
         },
         disabled: Boolean,
         icon: {
@@ -50,8 +50,8 @@ export default {
     methods: {
         handleClick() {
             if (!this.disabled) {
-                this.dispatch("YmaMenu", "item-click", this);
-                this.$emit("click", this);
+                this.dispatch('YmaMenu', 'item-click', this);
+                this.$emit('click', this);
             }
         },
     },

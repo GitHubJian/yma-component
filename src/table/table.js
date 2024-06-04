@@ -12,11 +12,14 @@ export default {
             type: Array,
             default: () => [],
         },
-        draggable: Boolean,
-        addible: Boolean,
+        rowClassName: [String, Function],
+        cellClassName: [String, Function],
         emptyText: {
             default: '暂无数据',
         },
+        //
+        draggable: Boolean,
+        addible: Boolean,
         rowSelectable: Boolean,
         fixed: Boolean,
     },
@@ -61,8 +64,17 @@ export default {
         },
     },
     render(h) {
-        const {store, $slots, data, fixed, draggable, addible, rowSelectable} =
-            this;
+        const {
+            store,
+            $slots,
+            data,
+            fixed,
+            draggable,
+            addible,
+            rowSelectable,
+
+            rowClassName,
+        } = this;
 
         return (
             <div
@@ -71,7 +83,8 @@ export default {
                     'yma-table--fixed': fixed,
                     'yma-table--empty': !data || data.length === 0,
                     'yma-table--row-selectable': rowSelectable,
-                }}>
+                }}
+            >
                 <div class='yma-table__hidden' ref='hiddenColumns'>
                     {$slots.default}
                 </div>
@@ -82,6 +95,7 @@ export default {
 
                 <div ref='bodyWrapper' class='yma-table__body-wrapper'>
                     <TableBody
+                        rowClassName={rowClassName}
                         store={store}
                         draggable={draggable}
                         addible={addible}
@@ -93,10 +107,7 @@ export default {
                     <div class='yma-table__empty-wrapper'>
                         <div class='yma-table__empty'>
                             <div class='yma-table__empty-icon'>
-                                <yma-icon
-                                    name='blank-contents-empty'
-                                    is-cover={true}
-                                />
+                                <yma-icon name='blank-contents-empty' is-cover={true} />
                             </div>
 
                             <div class='yma-table__empty-text'>暂无数据</div>

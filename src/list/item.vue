@@ -12,7 +12,7 @@
 
 <script>
 export default {
-    name: "YmaListItem",
+    name: 'YmaListItem',
     props: {
         title: {
             type: String,

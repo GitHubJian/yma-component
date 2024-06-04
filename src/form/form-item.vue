@@ -1,9 +1,19 @@
 <template>
-    <div class="yma-form-item">
-        <label-wrap :is-auto-width="labelStyle && labelStyle.width === 'auto'" :update-all="form.labelWidth === 'auto'">
+    <div
+        class="yma-form-item"
+        :class="{
+            'is-required': required,
+        }"
+    >
+        <label-wrap
+            :is-auto-width="labelStyle && labelStyle.width === 'auto'"
+            :update-all="form.labelWidth === 'auto'"
+        >
             <label
-                v-if="label || $slots.label" :for="labelFor"
-                class="yma-form-item__label" :style="labelStyle"
+                v-if="label || $slots.label"
+                :for="labelFor"
+                class="yma-form-item__label"
+                :style="labelStyle"
             >
                 <slot name="label">{{ label }}</slot>
             </label>
@@ -31,6 +41,10 @@ export default {
         label: String,
         labelWidth: String,
         prop: String,
+        required: {
+            type: Boolean,
+            default: undefined,
+        },
     },
     components: {
         LabelWrap,
@@ -144,6 +158,15 @@ export default {
 
         .yma-input-group {
             vertical-align: top;
+        }
+    }
+
+    @include when(required) {
+        & > .yma-form-item__label::before,
+        & .yma-form-item__label-wrap > .yma-form-item__label::before {
+            content: "*";
+            margin-right: 4px;
+            color: rgba(221, 51, 50, 1);
         }
     }
 

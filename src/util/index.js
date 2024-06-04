@@ -15,13 +15,12 @@ export function write({filename, filetype, content, callback}) {
 
     if (callback) {
         return callback();
-    } else {
-        return Promise.resolve();
     }
+    return Promise.resolve();
 }
 
 export function download({url, filename}) {
-    var a = document.createElement('a');
+    let a = document.createElement('a');
     a.href = url;
     a.download = filename;
     a.style.display = 'none';

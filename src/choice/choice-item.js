@@ -26,7 +26,7 @@ export default {
         this.config = {
             id: this.id,
             label: this.label,
-            metadata: this.metadata
+            metadata: this.metadata,
         };
     },
     mounted() {

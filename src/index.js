@@ -3,6 +3,7 @@ import Center from './center';
 import Checkbox from './checkbox';
 import Choice from './choice';
 import Col from './col';
+import Countdown from './countdown';
 import Desktop from './desktop';
 import Dropdown from './dropdown';
 import Form from './form';
@@ -27,6 +28,7 @@ const components = [
     Checkbox,
     Choice,
     Col,
+    Countdown,
     Desktop,
     Dropdown,
     Form,
@@ -59,6 +61,7 @@ export default {
     Checkbox,
     Choice,
     Col,
+    Countdown,
     Desktop,
     Dropdown,
     Form,

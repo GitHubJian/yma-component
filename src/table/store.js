@@ -81,11 +81,7 @@ const Store = Vue.extend({
             }
         },
         toggleRowSelection(row, selected, emitChange = true) {
-            const changed = toggleRowStatus(
-                this.states.selection,
-                row,
-                selected
-            );
+            const changed = toggleRowStatus(this.states.selection, row, selected);
             if (changed) {
                 const newSelection = (this.states.selection || []).slice();
                 // 调用 API 修改选中值，不触发 select 事件
@@ -105,10 +101,7 @@ const Store = Vue.extend({
             let selectionChanged = false;
             data.forEach((row, index) => {
                 if (states.selectable) {
-                    if (
-                        states.selectable.call(null, row, index) &&
-                        toggleRowStatus(selection, row, value)
-                    ) {
+                    if (states.selectable.call(null, row, index) && toggleRowStatus(selection, row, value)) {
                         selectionChanged = true;
                     }
                 } else {
@@ -119,10 +112,7 @@ const Store = Vue.extend({
             });
 
             if (selectionChanged) {
-                this.table.$emit(
-                    'selection-change',
-                    selection ? selection.slice() : []
-                );
+                this.table.$emit('selection-change', selection ? selection.slice() : []);
             }
 
             this.table.$emit('select-all', selection);
@@ -151,8 +141,7 @@ const Store = Vue.extend({
             let selectedCount = 0;
             for (let i = 0, j = data.length; i < j; i++) {
                 const item = data[i];
-                const isRowSelectable =
-                    selectable && selectable.call(null, item, i);
+                const isRowSelectable = selectable && selectable.call(null, item, i);
                 if (!isSelected(item)) {
                     if (!selectable || isRowSelectable) {
                         isAllSelected = false;
@@ -224,10 +213,7 @@ export function createStore(table, initialState = {}) {
     const store = new Store();
     store.table = table;
 
-    store.mutations.toggleAllSelection = debounce(
-        store._toggleAllSelection,
-        10
-    );
+    store.mutations.toggleAllSelection = debounce(store._toggleAllSelection, 10);
     Object.keys(initialState).forEach(key => {
         store.states[key] = initialState[key];
     });

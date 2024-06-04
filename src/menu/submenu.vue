@@ -7,7 +7,8 @@
         }"
     >
         <div
-            class="yma-submenu__inner" @click="handleClick"
+            class="yma-submenu__inner"
+            @click="handleClick"
             @mouseenter="handleMouseenter"
             @mouseleave="handleMouseleave"
         >
@@ -29,6 +30,8 @@
 <script>
 import emitter from '../helper/emitter';
 import mixin from './mixin';
+
+let uuid = 0;
 
 export default {
     name: 'YmaSubmenu',
@@ -89,8 +92,7 @@ export default {
         },
     },
     methods: {
-        handleCollapseToggle(value) {
-        },
+        handleCollapseToggle(value) {},
         addItem(item) {
             this.$set(this.items, item.index, item);
         },
@@ -105,10 +107,7 @@ export default {
         },
         handleClick() {
             const {rootMenu, disabled} = this;
-            if (
-                (rootMenu.collapse)
-                || disabled
-            ) {
+            if (rootMenu.collapse || disabled) {
                 return;
             }
 
@@ -116,10 +115,7 @@ export default {
         },
         handleMouseenter(event, showTimeout = this.showTimeout) {
             const {rootMenu, disabled} = this;
-            if (
-                !rootMenu.collapse
-                || disabled
-            ) {
+            if (!rootMenu.collapse || disabled) {
                 return;
             }
 
@@ -133,10 +129,7 @@ export default {
         },
         handleMouseleave() {
             const {rootMenu} = this;
-            if (
-
-                (!rootMenu.collapse)
-            ) {
+            if (!rootMenu.collapse) {
                 return;
             }
             this.dispatch('YmaSubmenu', 'mouse-leave-child');
@@ -180,13 +173,23 @@ export default {
         box-sizing: border-box;
         height: 36px;
         padding: 10px 4px 10px 4px;
-        color:  #0d0d0de5;
+        color: #0d0d0de5;
         font-weight: 400;
         font-size: 14px;
         font-family: PingFang SC;
         line-height: 14px;
         text-align: left;
         cursor: pointer;
+    }
+
+    @include when(opened) {
+        .yma-menu__toggle {
+            transform: rotate(0);
+        }
+    }
+
+    .yma-menu__toggle {
+        transform: rotate(-90deg);
     }
 }
 </style>
