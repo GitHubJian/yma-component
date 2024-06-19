@@ -89,6 +89,11 @@ export default {
         text-align: left;
         cursor: pointer;
 
+        &:hover {
+            border-radius: 4px;
+            background-color: rgba(59, 100, 252, .1);
+        }
+
         & + & {
             margin-top: 4px;
         }

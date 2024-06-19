@@ -151,6 +151,10 @@ export default {
                 this.top = parseInt(
                     this.headerHeight + refNodeRect.top + refNodeRect.height - tbodyRect.top - scrollTop,
                 );
+
+                this.$nextTick(() => {
+                    this.$refs.tableBodyInput.focus();
+                });
             });
         },
         cancelHandler() {
@@ -179,6 +183,7 @@ export default {
                 </div>
 
                 <TableBodyInput
+                    ref='tableBodyInput'
                     store={store}
                     style={{
                         display: !isShowInput ? 'none' : 'block',

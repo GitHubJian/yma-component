@@ -81,12 +81,12 @@ export default {
     }
 
     @include e(content) {
-        display: flex;
-        align-items: center;
+        display: inline-block;
     }
 
     @include e(inner) {
         position: relative;
+        display: inline-block;
         padding: 0 2px;
     }
 
@@ -161,11 +161,8 @@ export default {
     }
 
     position: relative;
-    display: inline-flex;
+    display: inline-block;
     vertical-align: middle;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
     padding: 0;
     color: rgba(30, 95, 199, 1);
     outline: none;

@@ -86,7 +86,8 @@
     }
 
     @include e(body) {
-        @include e(tr) {
+        .yma-table__tr{
+
             border-width: 0 0 1px 0;
             border-style: solid;
             border-color: #0d0d0d1f;
@@ -241,8 +242,21 @@
         left: 0;
         width: 100%;
         height: 100%;
-        opacity: 0.5;
+        opacity: 0.3;
         background: #000;
+    }
+
+    @include e(tbody-input-inner){
+        width: 100%
+    }
+
+    .yma-link + .yma-link {
+        margin-left: 12px;
+    }
+
+    @include e(tbody-input-fill){
+        display: inline-block;
+        width: 40px;
     }
 }
 

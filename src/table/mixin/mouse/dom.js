@@ -242,7 +242,7 @@ export function getStyle(el, styleName) {
     }
 }
 
-export function styles2string(styles) {
+export function sty2str(styles) {
     const cssVarRE = /^--/;
     const importantRE = /\s*!important$/;
     const caches = {};
@@ -346,7 +346,7 @@ export function createStyleBlock(selector, styles) {
         selector = selector.join(' ');
     }
 
-    return `${selector} {${styles2string(styles)}}`;
+    return `${selector} {${sty2str(styles)}}`;
 }
 
 export function insertBefore(parentNode, newNode, referenceNode) {

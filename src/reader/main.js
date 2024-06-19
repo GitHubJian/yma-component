@@ -48,6 +48,7 @@ export default {
             this.file = file;
 
             if (this.type === 'text') {
+                // TODO 判断文件是否为 UTF-8
                 reader.readAsText(file);
             } else if (this.type === 'buffer') {
                 reader.readAsArrayBuffer(file);
