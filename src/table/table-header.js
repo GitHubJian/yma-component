@@ -46,7 +46,11 @@ export default {
 
             return classes.join(' ');
         },
-        toggleAllSelection() {
+        toggleAllSelection(e) {
+            if (e && e.preventDefault) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
             this.store.commit('toggleAllSelection');
         },
     },

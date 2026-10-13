@@ -1,6 +1,50 @@
 import YmaIcon from '../icon';
 import YmaCenter from '../center';
 
+function format(source, params) {
+    if (arguments.length === 1) {
+        return function () {
+            var args = Array.prototype.slice.call(arguments);
+            args.unshift(source);
+
+            return format.apply(this, args);
+        };
+    }
+
+    if (params === undefined) {
+        return source;
+    }
+
+    if (arguments.length > 2 && params.constructor !== Array) {
+        params = Array.prototype.slice.call(arguments, 1);
+    }
+
+    if (params.constructor !== Array) {
+        params = [params];
+    }
+
+    params.forEach(function (param, i) {
+        source = source.replace(
+            new RegExp('\\{' + i + '\\}', 'g'),
+            function () {
+                return param;
+            }
+        );
+    });
+
+    return source;
+}
+
+function isUTF8(content) {
+    return content.indexOf('�') === -1;
+}
+
+const TEXT = {
+    0: '选择文件',
+    1: '正在解析文件 ({0})...',
+    2: '文件 ({0}) 读取失败，文件编码仅支持 {1}',
+};
+
 const reader = new FileReader();
 export default {
     name: 'YmaReader',
@@ -26,19 +70,37 @@ export default {
     data() {
         return {
             file: Object.freeze({}),
+            status: 0, // 0 初始化 1 成功 2 失败
+            text: TEXT[0],
         };
     },
     mounted() {
+        const that = this;
         reader.onload = e => {
             const content = e.target.result;
-
             const {name} = this.file;
+            if (this.type === 'text') {
+                if (isUTF8(content)) {
+                    this.status = 1;
+                    this.text = format(TEXT[1], name);
+                } else {
+                    this.status = 2;
+                    this.text = format(TEXT[2], name, 'UTF8');
+                }
+            } else {
+                this.status = 1;
+                this.text = format(TEXT[1], name);
+            }
+
             this.$emit('content', content, name);
         };
 
         reader.onerror = e => {
+            this.status = 2;
+            this.text = format(TEXT[2]);
+
             this.file = null;
-            console.log('Yma Reader: 文件读取失败，' + e.message);
+            console.warn('Yma Reader: 文件读取失败，' + e.message);
         };
     },
     methods: {
@@ -57,8 +119,14 @@ export default {
         clickHandler() {
             this.$refs.input.click();
         },
+        reset() {
+            this.status = 0;
+            this.text = TEXT[0];
+        },
     },
     render(h) {
+        const {status, text} = this;
+
         const accept = this.accept
             .map(function (e) {
                 e = e.replace(/\s/g, '').toLowerCase();
@@ -75,8 +143,11 @@ export default {
                 <div class='yma-reader__inner' on-click={this.clickHandler}>
                     <yma-center align='center'>
                         <span class='yma-reader__logo'>
-                            <yma-icon name='symbol_cross'></yma-icon>
-                            <span class='yma-reader__text'>选择文件</span>
+                            {status === 0 && (
+                                <yma-icon name='symbol_cross'></yma-icon>
+                            )}
+
+                            <span class='yma-reader__text'>{text}</span>
                         </span>
                     </yma-center>
                 </div>

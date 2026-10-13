@@ -71,7 +71,7 @@ export default {
                     this.text = `${this.num}s后重发`;
 
                     this.timer = window.setInterval(() => {
-                        if (this.num === 0) {
+                        if (this.num <= 0) {
                             window.clearInterval(this.timer);
                             this.timer = null;
                             this.lock = false;

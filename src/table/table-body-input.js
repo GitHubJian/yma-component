@@ -40,9 +40,12 @@ export default {
             this.submitHandler(data);
         },
         handleCancel() {
-            this.inputs = [];
+            this.reset();
 
             this.cancelHandler();
+        },
+        reset() {
+            this.inputs = [];
         },
         focus() {
             if (Array.isArray(this.$refs.input)) {

@@ -87,7 +87,7 @@ export default {
                 {addible ? (
                     <YmaTableAppend
                         appendHandler={() => {
-                            this.appendHandler(this.$refs.tr, $index);
+                            this.insertHandler(this.$refs.tr, $index);
                         }}
                     />
                 ) : null}
@@ -103,6 +103,9 @@ export default {
 
                 owner.handleRowSelect(this.isActive, row, $index);
             }
+        },
+        insertHandler(tr, $index) {
+            this.appendHandler(tr, $index);
         },
     },
 };

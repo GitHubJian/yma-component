@@ -1,0 +1,119 @@
+# =============================================================================
+# .gitattributes 换行与二进制规范
+# -----------------------------------------------------------------------------
+# 目标：
+#   1. 仓库内统一使用 LF，避免 Windows autocrlf 产生「有变更、无 diff」的假脏文件
+#   2. 明确文本 / 二进制，防止图片、字体、xlsx 等被错误做换行转换
+#   3. 与平台无关：不依赖个人 core.autocrlf 配置
+#
+# 生效后建议（一次性）：
+#   git add --renormalize .
+#   git status   # 确认仅换行相关变更后提交
+#
+# 本地建议：
+#   git config core.autocrlf false
+#   # 或至少不要用 true；由本文件的 eol=lf 统一控制
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# 默认：按内容检测，文本一律 LF
+# -----------------------------------------------------------------------------
+* text=auto eol=lf
+
+# -----------------------------------------------------------------------------
+# 源码 / 配置（显式声明，避免误判）
+# -----------------------------------------------------------------------------
+*.js          text eol=lf
+*.mjs         text eol=lf
+*.cjs         text eol=lf
+*.vue         text eol=lf
+*.ts          text eol=lf
+*.tsx         text eol=lf
+*.jsx         text eol=lf
+*.json        text eol=lf
+*.json5       text eol=lf
+*.md          text eol=lf
+*.markdown    text eol=lf
+*.html        text eol=lf
+*.htm         text eol=lf
+*.css         text eol=lf
+*.scss        text eol=lf
+*.sass        text eol=lf
+*.less        text eol=lf
+*.yml         text eol=lf
+*.yaml        text eol=lf
+*.xml         text eol=lf
+*.svg         text eol=lf
+*.txt         text eol=lf
+*.graphql     text eol=lf
+*.gql         text eol=lf
+
+# 构建 / 工程配置
+*.config.js   text eol=lf
+yma.config.js text eol=lf
+.editorconfig text eol=lf
+.eslintrc     text eol=lf
+.eslintrc.*   text eol=lf
+.prettierrc   text eol=lf
+.prettierrc.* text eol=lf
+.babelrc      text eol=lf
+.npmrc        text eol=lf
+.nvmrc        text eol=lf
+.gitignore    text eol=lf
+.gitattributes text eol=lf
+
+# -----------------------------------------------------------------------------
+# Shell：必须 LF（CRLF 会导致 shebang / 脚本执行失败）
+# -----------------------------------------------------------------------------
+*.sh          text eol=lf
+*.bash        text eol=lf
+
+# -----------------------------------------------------------------------------
+# Windows 脚本：必须 CRLF（若后续新增 bat/cmd/ps1）
+# -----------------------------------------------------------------------------
+*.bat         text eol=crlf
+*.cmd         text eol=crlf
+*.ps1         text eol=crlf
+
+# -----------------------------------------------------------------------------
+# 二进制：禁止换行转换
+# -----------------------------------------------------------------------------
+# 图片
+*.png         binary
+*.jpg         binary
+*.jpeg        binary
+*.gif         binary
+*.webp        binary
+*.ico         binary
+*.bmp         binary
+
+# 字体
+*.woff        binary
+*.woff2       binary
+*.ttf         binary
+*.eot         binary
+*.otf         binary
+
+# 文档 / 表格 / 压缩包（i18n 等会用到 xlsx）
+*.xlsx        binary
+*.xls         binary
+*.pdf         binary
+*.zip         binary
+*.gz          binary
+*.tgz         binary
+*.7z          binary
+*.rar         binary
+
+# 音视频 / 其它
+*.mp3         binary
+*.mp4         binary
+*.webm        binary
+*.wasm        binary
+*.map         binary
+
+# -----------------------------------------------------------------------------
+# 锁文件：按文本处理，保持 LF（便于 diff / merge）
+# -----------------------------------------------------------------------------
+package-lock.json  text eol=lf
+yarn.lock          text eol=lf
+pnpm-lock.yaml     text eol=lf

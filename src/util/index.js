@@ -29,34 +29,62 @@ export function download({url, filename}) {
     document.body.removeChild(a);
 }
 
-export function copy(text = '', callback) {
-    const btn = document.createElement('button');
-    btn.setAttribute('data-clipboard-text', text);
-    document.body.appendChild(btn);
+function Copy() {
+    this.btn = document.createElement('button');
+    this.btn.setAttribute('style', 'position: fixed; top: -9999px; left: -9999px;');
 
-    let clipboard = new Clipboard(btn);
-    clipboard.on('success', function (e) {
+    this.clipboard = new Clipboard(this.btn);
+    this.clipboard.on('success', function (e) {
         console.info('Action:', e.action);
         console.info('Text:', e.text);
         console.info('Trigger:', e.trigger);
-
-        e.clearSelection();
-
-        clipboard = null;
-        document.body.removeChild(btn);
-
-        callback && callback(null);
     });
 
-    clipboard.on('error', function (e) {
+    this.clipboard.on('error', function (e) {
         console.error('Action:', e.action);
         console.error('Trigger:', e.trigger);
-
-        clipboard = null;
-        document.body.removeChild(btn);
-
-        callback && callback(e);
     });
 
-    btn.click();
+    document.body.appendChild(this.btn);
 }
+
+Copy.prototype.copy = function (text = '', callback) {
+    const that = this;
+    this.btn.setAttribute('data-clipboard-text', text);
+
+    const successCallback = function (e) {
+        e.clearSelection();
+
+        that.clipboard.off('success', successCallback);
+        that.clipboard.off('error', failCallback);
+
+        that.btn.setAttribute('data-clipboard-text', '');
+
+        callback && callback(null);
+    };
+
+    const failCallback = function (e) {
+        that.clipboard.off('success', successCallback);
+        that.clipboard.off('error', failCallback);
+
+        that.btn.setAttribute('data-clipboard-text', '');
+
+        callback && callback(e);
+    };
+
+    this.clipboard.on('success', successCallback);
+    this.clipboard.on('error', failCallback);
+
+    this.btn.click();
+};
+
+Copy.prototype.destory = function () {
+    document.body.removeChild(btn);
+    this.clipboard.destory();
+
+    this.btn = null;
+    this.clipboard = null;
+};
+
+export const $Copy = new Copy();
+export const copy = $Copy.copy.bind($Copy);

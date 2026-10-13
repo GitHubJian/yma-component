@@ -3,9 +3,12 @@ import {toggleRowStatus} from './util';
 function debounce(callback, delay) {
     let timerId;
 
-    return function () {
+    return function (...args) {
+        const ctx = this;
         clearTimeout(timerId);
-        timerId = setTimeout(callback, delay);
+        timerId = setTimeout(function () {
+            callback.apply(ctx, args);
+        }, delay);
     };
 }
 
@@ -94,7 +97,13 @@ const Store = Vue.extend({
         },
         _toggleAllSelection() {
             const states = this.states;
-            const {data = [], selection} = states;
+            let data = states.data;
+            if ((!data || !data.length) && this.table && Array.isArray(this.table.data)) {
+                data = this.table.data;
+                states.data = data;
+            }
+            data = data || [];
+            const selection = states.selection || [];
             const value = !(states.isAllSelected || selection.length);
             states.isAllSelected = value;
 
@@ -213,7 +222,13 @@ export function createStore(table, initialState = {}) {
     const store = new Store();
     store.table = table;
 
-    store.mutations.toggleAllSelection = debounce(store._toggleAllSelection, 10);
+    // 必须按实例拷贝。mutations 在原型上是共享的，若直接
+    // store.mutations.toggleAllSelection = debounce(当前实例)
+    // 后创建的弹窗空表格会覆盖全选，表现为 data 变成 []。
+    store.mutations = Object.assign({}, Store.prototype.mutations);
+    store.mutations.toggleAllSelection = debounce(function () {
+        store._toggleAllSelection();
+    }, 10);
     Object.keys(initialState).forEach(key => {
         store.states[key] = initialState[key];
     });

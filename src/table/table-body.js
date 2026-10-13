@@ -136,6 +136,9 @@ export default {
             const phEl = (this.phEl = createElement({
                 attrs: {
                     class: 'yma-table__tr',
+                    style: {
+                        height: '54px',
+                    },
                 },
             }));
 
@@ -149,7 +152,7 @@ export default {
                 const refNodeRect = refNode.getBoundingClientRect();
 
                 this.top = parseInt(
-                    this.headerHeight + refNodeRect.top + refNodeRect.height - tbodyRect.top - scrollTop,
+                    54 + this.headerHeight + refNodeRect.top + refNodeRect.height - tbodyRect.top - scrollTop,
                 );
 
                 this.$nextTick(() => {
@@ -161,7 +164,19 @@ export default {
             this.top = 0;
             this.isShowInput = false;
             this.insertDataIndex = 0;
-            removeChild(this.phEl.parentNode, this.phEl);
+            if (this.phEl && this.phEl.parentNode) {
+                removeChild(this.phEl.parentNode, this.phEl);
+            }
+        },
+        handleCancel() {
+            this.top = 0;
+            this.isShowInput = false;
+            this.insertDataIndex = 0;
+            if (this.phEl && this.phEl.parentNode) {
+                removeChild(this.phEl.parentNode, this.phEl);
+            }
+
+            this.$refs.tableBodyInput.reset();
         },
     },
     render(h) {

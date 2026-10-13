@@ -150,7 +150,9 @@ export default {
                         'is-active': visible,
                     }}
                 >
-                    <span class='yma-choice-trigger__label'>{label}</span>
+                    <span class='yma-choice-trigger__label yma-text-truncate' title={label}>
+                        {label}
+                    </span>
 
                     {disabled ? null : <yma-icon class='yma-choice-trigger__icon' name='arrow_triangle_down' />}
                 </div>
@@ -170,7 +172,9 @@ export default {
                                             }}
                                             on-click={() => handleItemClick(id)}
                                         >
-                                            <span class='yma-choice-menu__item-label'>{label}</span>
+                                            <span class='yma-choice-menu__item-label yma-text-truncate' title={label}>
+                                                {label}
+                                            </span>
                                         </li>
                                     );
                                 })}

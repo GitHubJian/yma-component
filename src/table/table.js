@@ -62,6 +62,9 @@ export default {
 
             this.$emit('select', isActive, row, $index);
         },
+        cancelAppend() {
+            this.$refs.tableBody.cancelHandler();
+        },
     },
     render(h) {
         const {
@@ -95,6 +98,7 @@ export default {
 
                 <div ref='bodyWrapper' class='yma-table__body-wrapper'>
                     <TableBody
+                        ref='tableBody'
                         rowClassName={rowClassName}
                         store={store}
                         draggable={draggable}
