@@ -1,6 +1,16 @@
-const requireAll = requireContext => requireContext.keys().map(requireContext);
-const reqAsset = require.context('@/asset/svg', false, /\.svg$/);
-requireAll(reqAsset);
+import './svg/arrow_down_s.svg';
+import './svg/arrow_triangle_down.svg';
+import './svg/blank-contents-empty.svg';
+import './svg/error.svg';
+import './svg/info.svg';
+import './svg/success.svg';
+import './svg/symbol_cross.svg';
+import './svg/symbol_tick.svg';
+import './svg/warning.svg';
 
-const reqLocal = require.context('./svg', false, /\.svg$/);
-requireAll(reqLocal);
+export function registerIcons(requireContext) {
+    if (!requireContext || typeof requireContext.keys !== 'function') {
+        return;
+    }
+    requireContext.keys().forEach(key => requireContext(key));
+}

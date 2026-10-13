@@ -1,85 +1,6 @@
-export function on(el, event, handler) {
-    if (document.addEventListener) {
-        el.addEventListener(event, handler, false);
-    } else {
-        el.attachEvent('on' + event, handler);
-    }
-}
+import {on, off, hasClass, addClass, removeClass, getStyle, setStyle, setStyles} from '../../../helper/dom';
 
-export function off(el, event, handler) {
-    if (document.removeEventListener) {
-        el.removeEventListener(event, handler, false);
-    } else {
-        el.detachEvent('on' + event, handler);
-    }
-}
-
-export function hasClass(el, cls) {
-    if (!el || !cls) {
-        return false;
-    }
-
-    if (cls.indexOf(' ') !== -1) {
-        throw new Error('className should not contain space.');
-    }
-    if (el.classList) {
-        return el.classList.contains(cls);
-    }
-    return (' ' + el.className + ' ').indexOf(' ' + cls + ' ') > -1;
-}
-
-export function addClass(el, cls) {
-    if (!el) {
-        return;
-    }
-    let curClass = el.className;
-    let classes = (cls || '').split(' ');
-
-    for (let i = 0, j = classes.length; i < j; i++) {
-        let clsName = classes[i];
-        if (!clsName) {
-            continue;
-        }
-
-        if (el.classList) {
-            el.classList.add(clsName);
-        } else if (!hasClass(el, clsName)) {
-            curClass += ' ' + clsName;
-        }
-    }
-
-    if (!el.classList) {
-        el.setAttribute('class', curClass);
-    }
-}
-
-function trim(string) {
-    return (string || '').replace(/^[\s\uFEFF]+|[\s\uFEFF]+$/g, '');
-}
-export function removeClass(el, cls) {
-    if (!el || !cls) {
-        return;
-    }
-    let classes = cls.split(' ');
-    let curClass = ' ' + el.className + ' ';
-
-    for (let i = 0, j = classes.length; i < j; i++) {
-        let clsName = classes[i];
-        if (!clsName) {
-            continue;
-        }
-
-        if (el.classList) {
-            el.classList.remove(clsName);
-        } else if (hasClass(el, clsName)) {
-            curClass = curClass.replace(' ' + clsName + ' ', ' ');
-        }
-    }
-
-    if (!el.classList) {
-        el.setAttribute('class', trim(curClass));
-    }
-}
+export {on, off, hasClass, addClass, removeClass, getStyle, setStyle, setStyles};
 
 function isArrayLike(obj) {
     if (obj && typeof obj === 'object') {
@@ -164,82 +85,10 @@ export function classnames() {
     return classes;
 }
 
-export function setStyles(el, styles) {
-    const cssVarRE = /^--/;
-    const importantRE = /\s*!important$/;
-    const SPECIAL_CHARS_REGEXP = /([\:\-\_]+(.))/g;
-    const MOZ_HACK_REGEXP = /^moz([A-Z])/;
-
-    function hyphenate(str) {
-        let hyphenateRE = /\B([A-Z])/g;
-
-        return str.replace(hyphenateRE, '-$1').toLowerCase();
-    }
-
-    function camelCase(name) {
-        return name
-            .replace(SPECIAL_CHARS_REGEXP, function (_, separator, letter, offset) {
-                return offset ? letter.toUpperCase() : letter;
-            })
-            .replace(MOZ_HACK_REGEXP, 'Moz$1');
-    }
-
-    function setStyle(el, name, val) {
-        if (cssVarRE.test(name)) {
-            el.style.setProperty(name, val);
-        } else if (importantRE.test(val)) {
-            el.style.setProperty(hyphenate(name), val.replace(importantRE, ''), 'important');
-        } else {
-            let normalizedName = camelCase(name);
-            if (Array.isArray(val)) {
-                for (let i = 0, len = val.length; i < len; i++) {
-                    el.style[normalizedName] = val[i];
-                }
-            } else {
-                el.style[normalizedName] = val;
-            }
-        }
-    }
-
-    for (const name in styles) {
-        const cur = styles[name];
-        setStyle(el, name, cur == null ? '' : cur);
-    }
-}
-
 export function removeStyles(el, styleNames) {
     each(styleNames, function (_, name) {
         el.style.removeProperty(name);
     });
-}
-
-export function getStyle(el, styleName) {
-    if (!el || !styleName) {
-        return null;
-    }
-
-    const SPECIAL_CHARS_REGEXP = /([\:\-\_]+(.))/g;
-    const MOZ_HACK_REGEXP = /^moz([A-Z])/;
-
-    function camelCase(name) {
-        return name
-            .replace(SPECIAL_CHARS_REGEXP, function (_, separator, letter, offset) {
-                return offset ? letter.toUpperCase() : letter;
-            })
-            .replace(MOZ_HACK_REGEXP, 'Moz$1');
-    }
-
-    styleName = camelCase(styleName);
-    if (styleName === 'float') {
-        styleName = 'cssFloat';
-    }
-
-    try {
-        let computed = document.defaultView.getComputedStyle(el, '');
-        return el.style[styleName] || computed ? computed[styleName] : null;
-    } catch (e) {
-        return el.style[styleName];
-    }
 }
 
 export function sty2str(styles) {

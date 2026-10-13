@@ -14,8 +14,13 @@
 </template>
 
 <script>
+import YmaIcon from '../icon';
+
 export default {
     name: 'YmaMessage',
+    components: {
+        YmaIcon,
+    },
     props: {
         type: {
             type: String,

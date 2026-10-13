@@ -1,6 +1,7 @@
 import YmaIcon from '../icon';
 import clickoutside from '../helper/clickoutside';
 import emitter from '../helper/emitter';
+import popup from '../helper/popup';
 import {createStore} from './store';
 import YmaScroll from '../scroll';
 
@@ -8,7 +9,7 @@ let choiceIdSeed = 0;
 export default {
     name: 'YmaChoice',
     componentName: 'YmaChoice',
-    mixins: [emitter],
+    mixins: [emitter, popup],
     directives: {clickoutside},
     provide() {
         return {
@@ -38,7 +39,6 @@ export default {
 
         return {
             store,
-            timeout: null,
             visible: false,
             triggerEl: null,
             choiceEl: null,
@@ -79,42 +79,9 @@ export default {
         },
     },
     methods: {
-        show() {
-            clearTimeout(this.timeout);
-            this.timeout = setTimeout(() => {
-                this.visible = true;
-            }, 300);
-        },
-        hide() {
-            clearTimeout(this.timeout);
-            this.timeout = setTimeout(() => {
-                this.visible = false;
-            }, 300);
-        },
-        handleClick() {
-            if (this.visible) {
-                this.hide();
-            } else {
-                this.show();
-            }
-        },
         initEvent() {
-            let {trigger, show, hide, handleClick} = this;
-
-            if (!this.disabled) {
-                this.triggerEl = this.$refs.triggerEl;
-
-                let choiceEl = this.choiceEl;
-
-                if (trigger === 'hover') {
-                    this.triggerEl.addEventListener('mouseenter', show);
-                    this.triggerEl.addEventListener('mouseleave', hide);
-                    choiceEl.addEventListener('mouseenter', show);
-                    choiceEl.addEventListener('mouseleave', hide);
-                } else if (trigger === 'click') {
-                    this.triggerEl.addEventListener('click', handleClick);
-                }
-            }
+            this.triggerEl = this.$refs.triggerEl;
+            this.bindPopup(this.triggerEl, this.choiceEl);
         },
         handleItemClick(id) {
             const list = this.store.states.list;

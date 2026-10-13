@@ -2,7 +2,8 @@
     <div
         class="yma-form-item"
         :class="{
-            'is-required': required,
+            'is-required': isRequired,
+            'is-error': validateState === 'error',
         }"
     >
         <label-wrap
@@ -21,12 +22,14 @@
 
         <div class="yma-form-item__content" :style="contentStyle">
             <slot></slot>
+            <div v-if="validateMessage" class="yma-form-item__error">{{ validateMessage }}</div>
         </div>
     </div>
 </template>
 
 <script>
 import LabelWrap from './label-wrap';
+import {clone, getProp, setProp, normalizeRules, validateRules, matchTrigger} from './validate';
 
 export default {
     name: 'YmaFormItem',
@@ -45,6 +48,7 @@ export default {
             type: Boolean,
             default: undefined,
         },
+        rules: [Object, Array],
     },
     components: {
         LabelWrap,
@@ -93,6 +97,19 @@ export default {
 
             return ret;
         },
+        fieldValue() {
+            if (!this.form.model || !this.prop) {
+                return undefined;
+            }
+            return getProp(this.form.model, this.prop);
+        },
+        isRequired() {
+            if (this.required !== undefined) {
+                return this.required;
+            }
+            const formRules = this.form.rules && this.prop ? this.form.rules[this.prop] : [];
+            return normalizeRules(formRules, this.rules).some(rule => rule.required);
+        },
         form() {
             let parent = this.$parent;
             let parentName = parent.$options.componentName;
@@ -111,11 +128,74 @@ export default {
     data() {
         return {
             computedLabelWidth: '',
+            validateState: '',
+            validateMessage: '',
+            initialValue: undefined,
         };
+    },
+    mounted() {
+        if (this.prop) {
+            this.initialValue = clone(this.fieldValue);
+            this.form.addField(this);
+        }
+    },
+    beforeDestroy() {
+        if (this.prop && this.form && this.form.removeField) {
+            this.form.removeField(this);
+        }
     },
     methods: {
         updateComputedLabelWidth(width) {
             this.computedLabelWidth = width ? `${width}px` : '';
+        },
+        getRules(trigger) {
+            const formRules = this.form.rules && this.prop ? this.form.rules[this.prop] : [];
+            return normalizeRules(formRules, this.rules).filter(rule => matchTrigger(rule, trigger));
+        },
+        onFieldBlur() {
+            this.validate('blur');
+        },
+        onFieldChange() {
+            this.validate('change');
+        },
+        validate(trigger, callback) {
+            const rules = this.getRules(trigger);
+            if (!this.prop) {
+                if (typeof callback === 'function') {
+                    callback('');
+                }
+                return Promise.resolve('');
+            }
+            if (!rules.length) {
+                if (!trigger) {
+                    this.clearValidate();
+                }
+                const message = trigger ? this.validateMessage || '' : '';
+                if (typeof callback === 'function') {
+                    callback(message);
+                }
+                return Promise.resolve(message);
+            }
+
+            return validateRules(rules, this.fieldValue).then(message => {
+                this.validateState = message ? 'error' : 'success';
+                this.validateMessage = message;
+                if (typeof callback === 'function') {
+                    callback(message);
+                }
+                return message;
+            });
+        },
+        clearValidate() {
+            this.validateState = '';
+            this.validateMessage = '';
+        },
+        resetField() {
+            if (!this.prop || !this.form.model) {
+                return;
+            }
+            setProp(this.form.model, this.prop, clone(this.initialValue));
+            this.clearValidate();
         },
     },
 };
@@ -159,6 +239,13 @@ export default {
         .yma-input-group {
             vertical-align: top;
         }
+    }
+
+    @include e(error) {
+        padding-top: 2px;
+        color: #c25010;
+        font-size: 12px;
+        line-height: 20px;
     }
 
     @include when(required) {

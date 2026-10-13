@@ -13,6 +13,10 @@
                 <slot></slot>
             </yma-main>
         </yma-container>
+
+        <yma-footer v-if="$slots.footer" :height="footer">
+            <slot name="footer"></slot>
+        </yma-footer>
     </yma-container>
 </template>
 

@@ -9,11 +9,11 @@ export default {
         },
         filetype: {
             type: String,
-            default: '',
+            default: 'text/plain',
         },
         content: {
             type: String,
-            default: 'text/plain',
+            default: '',
         },
         visible: Boolean,
     },

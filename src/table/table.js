@@ -1,6 +1,6 @@
 import TableHeader from './table-header';
 import TableBody from './table-body';
-import {createStore, mapStates} from './store';
+import {createStore} from './store';
 import emitter from '../helper/emitter';
 
 let tableIdSeed = 0;
@@ -27,12 +27,6 @@ export default {
         this.store = createStore(this, {});
 
         return {};
-    },
-    computed: {
-        ...mapStates({
-            columns: 'columns',
-            fixedColumns: 'fixedColumns',
-        }),
     },
     watch: {
         data: {
@@ -114,7 +108,7 @@ export default {
                                 <yma-icon name='blank-contents-empty' is-cover={true} />
                             </div>
 
-                            <div class='yma-table__empty-text'>暂无数据</div>
+                            <div class='yma-table__empty-text'>{this.emptyText}</div>
                         </div>
                     </div>
                 ) : null}

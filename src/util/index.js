@@ -1,4 +1,71 @@
-import Clipboard from 'clipboard';
+let clipboardLoader;
+let copyInstance = null;
+
+function loadClipboard() {
+    if (!clipboardLoader) {
+        clipboardLoader = import('clipboard').then(mod => mod.default || mod);
+    }
+    return clipboardLoader;
+}
+
+function ensureCopyInstance(Clipboard) {
+    if (copyInstance) {
+        return copyInstance;
+    }
+    const btn = document.createElement('button');
+    btn.setAttribute('type', 'button');
+    btn.setAttribute('aria-hidden', 'true');
+    btn.setAttribute('style', 'position: fixed; top: -9999px; left: -9999px;');
+    document.body.appendChild(btn);
+    copyInstance = {
+        btn,
+        clipboard: new Clipboard(btn),
+    };
+    return copyInstance;
+}
+
+function destroyCopy() {
+    if (!copyInstance) {
+        return;
+    }
+    if (copyInstance.btn && copyInstance.btn.parentNode) {
+        copyInstance.btn.parentNode.removeChild(copyInstance.btn);
+    }
+    if (copyInstance.clipboard && typeof copyInstance.clipboard.destroy === 'function') {
+        copyInstance.clipboard.destroy();
+    }
+    copyInstance = null;
+}
+
+function fallbackCopy(text) {
+    return loadClipboard().then(Clipboard => {
+        const instance = ensureCopyInstance(Clipboard);
+        return new Promise((resolve, reject) => {
+            const cleanup = () => {
+                instance.clipboard.off('success', onSuccess);
+                instance.clipboard.off('error', onError);
+                instance.btn.setAttribute('data-clipboard-text', '');
+            };
+            const onSuccess = e => {
+                if (e && e.clearSelection) {
+                    e.clearSelection();
+                }
+                cleanup();
+                resolve();
+            };
+            const onError = e => {
+                cleanup();
+                reject(e);
+            };
+
+            instance.btn.setAttribute('data-clipboard-text', text);
+            instance.clipboard.on('success', onSuccess);
+            instance.clipboard.on('error', onError);
+            instance.btn.click();
+        });
+    });
+}
+
 export function write({filename, filetype, content, callback}) {
     const blob = new Blob([content], {type: filetype});
     const url = URL.createObjectURL(blob);
@@ -20,7 +87,7 @@ export function write({filename, filetype, content, callback}) {
 }
 
 export function download({url, filename}) {
-    let a = document.createElement('a');
+    const a = document.createElement('a');
     a.href = url;
     a.download = filename;
     a.style.display = 'none';
@@ -29,62 +96,38 @@ export function download({url, filename}) {
     document.body.removeChild(a);
 }
 
-function Copy() {
-    this.btn = document.createElement('button');
-    this.btn.setAttribute('style', 'position: fixed; top: -9999px; left: -9999px;');
+export function copy(text = '', callback) {
+    const value = text == null ? '' : String(text);
+    const done = err => {
+        if (typeof callback === 'function') {
+            callback(err || null);
+        }
+        if (err) {
+            return Promise.reject(err);
+        }
+        return Promise.resolve();
+    };
 
-    this.clipboard = new Clipboard(this.btn);
-    this.clipboard.on('success', function (e) {
-        console.info('Action:', e.action);
-        console.info('Text:', e.text);
-        console.info('Trigger:', e.trigger);
-    });
+    const viaClipboard = () => {
+        if (
+            typeof navigator !== 'undefined' &&
+            navigator.clipboard &&
+            typeof window !== 'undefined' &&
+            window.isSecureContext
+        ) {
+            return navigator.clipboard.writeText(value);
+        }
+        return Promise.reject(new Error('clipboard api unavailable'));
+    };
 
-    this.clipboard.on('error', function (e) {
-        console.error('Action:', e.action);
-        console.error('Trigger:', e.trigger);
-    });
-
-    document.body.appendChild(this.btn);
+    return viaClipboard().then(
+        () => done(),
+        () => fallbackCopy(value).then(() => done(), done),
+    );
 }
 
-Copy.prototype.copy = function (text = '', callback) {
-    const that = this;
-    this.btn.setAttribute('data-clipboard-text', text);
-
-    const successCallback = function (e) {
-        e.clearSelection();
-
-        that.clipboard.off('success', successCallback);
-        that.clipboard.off('error', failCallback);
-
-        that.btn.setAttribute('data-clipboard-text', '');
-
-        callback && callback(null);
-    };
-
-    const failCallback = function (e) {
-        that.clipboard.off('success', successCallback);
-        that.clipboard.off('error', failCallback);
-
-        that.btn.setAttribute('data-clipboard-text', '');
-
-        callback && callback(e);
-    };
-
-    this.clipboard.on('success', successCallback);
-    this.clipboard.on('error', failCallback);
-
-    this.btn.click();
+export const $Copy = {
+    copy,
+    destroy: destroyCopy,
+    destory: destroyCopy,
 };
-
-Copy.prototype.destory = function () {
-    document.body.removeChild(btn);
-    this.clipboard.destory();
-
-    this.btn = null;
-    this.clipboard = null;
-};
-
-export const $Copy = new Copy();
-export const copy = $Copy.copy.bind($Copy);

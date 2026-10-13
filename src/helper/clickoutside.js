@@ -1,16 +1,43 @@
-import {on} from './dom';
+import {on, off} from './dom';
 
 const nodeList = [];
 const ctx = '@@clickoutsideContext';
 
 let startClick;
 let seed = 0;
+let listening = false;
 
-on(document, 'mousedown', e => (startClick = e));
+function handleMouseDown(e) {
+    startClick = e;
+}
 
-on(document, 'mouseup', e => {
-    nodeList.forEach(node => node[ctx].documentHandler(e, startClick));
-});
+function handleMouseUp(e) {
+    nodeList.forEach(node => {
+        const context = node[ctx];
+        if (context) {
+            context.documentHandler(e, startClick);
+        }
+    });
+}
+
+function ensureListening() {
+    if (listening || typeof document === 'undefined') {
+        return;
+    }
+    on(document, 'mousedown', handleMouseDown);
+    on(document, 'mouseup', handleMouseUp);
+    listening = true;
+}
+
+function stopListening() {
+    if (!listening || nodeList.length || typeof document === 'undefined') {
+        return;
+    }
+    off(document, 'mousedown', handleMouseDown);
+    off(document, 'mouseup', handleMouseUp);
+    listening = false;
+    startClick = null;
+}
 
 function createDocumentHandler(el, binding, vnode) {
     return function (mouseup = {}, mousedown = {}) {
@@ -47,21 +74,27 @@ export default {
             methodName: binding.expression,
             bindingFn: binding.value,
         };
+        ensureListening();
     },
     update(el, binding, vnode) {
+        if (!el[ctx]) {
+            return;
+        }
         el[ctx].documentHandler = createDocumentHandler(el, binding, vnode);
         el[ctx].methodName = binding.expression;
         el[ctx].bindingFn = binding.value;
     },
     unbind(el) {
-        let len = nodeList.length;
-        for (let i = 0; i < len; i++) {
-            if (nodeList[i][ctx].id === el[ctx].id) {
+        if (!el[ctx]) {
+            return;
+        }
+        for (let i = 0; i < nodeList.length; i++) {
+            if (nodeList[i][ctx] && nodeList[i][ctx].id === el[ctx].id) {
                 nodeList.splice(i, 1);
                 break;
             }
         }
-
         delete el[ctx];
+        stopListening();
     },
 };

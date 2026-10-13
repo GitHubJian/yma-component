@@ -1,47 +1,34 @@
-const SPECIAL_CHARS_REGEXP = /([\:\-\_]+(.))/g;
+const SPECIAL_CHARS_REGEXP = /([:\-_]+(.))/g;
 const MOZ_HACK_REGEXP = /^moz([A-Z])/;
+const HYPHENATE_RE = /\B([A-Z])/g;
 
-const trim = function (string) {
+function trim(string) {
     return (string || '').replace(/^[\s\uFEFF]+|[\s\uFEFF]+$/g, '');
-};
+}
 
-const camelCase = function (name) {
+export function camelCase(name) {
     return name
         .replace(SPECIAL_CHARS_REGEXP, function (_, separator, letter, offset) {
             return offset ? letter.toUpperCase() : letter;
         })
         .replace(MOZ_HACK_REGEXP, 'Moz$1');
-};
+}
 
-export const on = (function on() {
-    if (document.addEventListener) {
-        return function (element, event, handler) {
-            if (element && event && handler) {
-                element.addEventListener(event, handler, false);
-            }
-        };
-    }
-    return function (element, event, handler) {
-        if (element && event && handler) {
-            element.attachEvent('on' + event, handler);
-        }
-    };
-})();
+export function hyphenate(str) {
+    return String(str).replace(HYPHENATE_RE, '-$1').toLowerCase();
+}
 
-export const off = (function () {
-    if (document.removeEventListener) {
-        return function (element, event, handler) {
-            if (element && event) {
-                element.removeEventListener(event, handler, false);
-            }
-        };
+export function on(element, event, handler) {
+    if (element && event && handler) {
+        element.addEventListener(event, handler, false);
     }
-    return function (element, event, handler) {
-        if (element && event) {
-            element.detachEvent('on' + event, handler);
-        }
-    };
-})();
+}
+
+export function off(element, event, handler) {
+    if (element && event) {
+        element.removeEventListener(event, handler, false);
+    }
+}
 
 export function hasClass(el, className) {
     if (!el || !className) {
@@ -61,10 +48,10 @@ export function addClass(el, className) {
         return;
     }
     let curClass = el.className;
-    let classes = (className || '').split(' ');
+    const classes = (className || '').split(' ');
 
     for (let i = 0, j = classes.length; i < j; i++) {
-        let clsName = classes[i];
+        const clsName = classes[i];
         if (!clsName) {
             continue;
         }
@@ -84,11 +71,11 @@ export function removeClass(el, className) {
     if (!el || !className) {
         return;
     }
-    let classes = className.split(' ');
+    const classes = className.split(' ');
     let curClass = ' ' + el.className + ' ';
 
     for (let i = 0, j = classes.length; i < j; i++) {
-        let clsName = classes[i];
+        const clsName = classes[i];
         if (!clsName) {
             continue;
         }
@@ -104,7 +91,7 @@ export function removeClass(el, className) {
     }
 }
 
-export const getStyle = function (el, styleName) {
+export function getStyle(el, styleName) {
     if (!el || !styleName) {
         return null;
     }
@@ -113,27 +100,56 @@ export const getStyle = function (el, styleName) {
         styleName = 'cssFloat';
     }
     try {
-        let computed = document.defaultView.getComputedStyle(el, '');
-        return el.style[styleName] || computed ? computed[styleName] : null;
+        const computed = document.defaultView.getComputedStyle(el, '');
+        return el.style[styleName] || (computed ? computed[styleName] : null);
     } catch (e) {
         return el.style[styleName];
     }
-};
+}
 
 export function setStyle(el, styleName, value) {
-    if (!element || !styleName) {
+    if (!el || styleName == null || styleName === '') {
         return;
     }
 
     if (typeof styleName === 'object') {
-        for (let prop in styleName) {
-            if (styleName.hasOwnProperty(prop)) {
-                setStyle(element, prop, styleName[prop]);
+        for (const prop in styleName) {
+            if (Object.prototype.hasOwnProperty.call(styleName, prop)) {
+                setStyle(el, prop, styleName[prop]);
             }
         }
-    } else {
-        styleName = camelCase(styleName);
+        return;
+    }
 
-        element.style[styleName] = value;
+    const name = camelCase(styleName);
+    if (Array.isArray(value)) {
+        for (let i = 0; i < value.length; i++) {
+            el.style[name] = value[i];
+        }
+        return;
+    }
+    el.style[name] = value;
+}
+
+const CSS_VAR_RE = /^--/;
+const IMPORTANT_RE = /\s*!important$/;
+
+export function setStyles(el, styles) {
+    if (!el || !styles) {
+        return;
+    }
+
+    for (const name in styles) {
+        if (!Object.prototype.hasOwnProperty.call(styles, name)) {
+            continue;
+        }
+        const val = styles[name] == null ? '' : styles[name];
+        if (CSS_VAR_RE.test(name)) {
+            el.style.setProperty(name, val);
+        } else if (typeof val === 'string' && IMPORTANT_RE.test(val)) {
+            el.style.setProperty(hyphenate(name), val.replace(IMPORTANT_RE, ''), 'important');
+        } else {
+            setStyle(el, name, val);
+        }
     }
 }

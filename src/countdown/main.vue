@@ -70,10 +70,10 @@ export default {
                     this.lock = true;
                     this.text = `${this.num}s后重发`;
 
+                    this.clearTimer();
                     this.timer = window.setInterval(() => {
                         if (this.num <= 0) {
-                            window.clearInterval(this.timer);
-                            this.timer = null;
+                            this.clearTimer();
                             this.lock = false;
                             this.text = '发送验证码';
                             this.num = this.count;
@@ -86,15 +86,21 @@ export default {
                 }
             });
         },
+        clearTimer() {
+            if (this.timer) {
+                window.clearInterval(this.timer);
+                this.timer = null;
+            }
+        },
         reset() {
-            this.disabled = false;
             this.lock = false;
             this.num = this.count;
-
-            window.clearInterval(this.timer);
-            this.timer = null;
+            this.clearTimer();
             this.text = '发送验证码';
         },
+    },
+    beforeDestroy() {
+        this.clearTimer();
     },
 };
 </script>
@@ -107,7 +113,7 @@ export default {
         opacity: .4;
     }
 
-    color: var(---, #3b64fc);
+    color: var(--yma-color-primary, #3b64fc);
     font-weight: 400;
     font-style: normal;
     font-size: 14px;

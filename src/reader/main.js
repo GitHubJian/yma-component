@@ -35,8 +35,12 @@ function format(source, params) {
     return source;
 }
 
-function isUTF8(content) {
-    return content.indexOf('�') === -1;
+function decodeUTF8(buffer) {
+    try {
+        return new TextDecoder('utf-8', {fatal: true}).decode(buffer);
+    } catch (e) {
+        return null;
+    }
 }
 
 const TEXT = {
@@ -45,7 +49,6 @@ const TEXT = {
     2: '文件 ({0}) 读取失败，文件编码仅支持 {1}',
 };
 
-const reader = new FileReader();
 export default {
     name: 'YmaReader',
     components: {
@@ -75,46 +78,62 @@ export default {
         };
     },
     mounted() {
-        const that = this;
-        reader.onload = e => {
-            const content = e.target.result;
+        this.reader = new FileReader();
+        this.reader.onload = e => {
+            const buffer = e.target.result;
             const {name} = this.file;
+            let content = buffer;
+
             if (this.type === 'text') {
-                if (isUTF8(content)) {
-                    this.status = 1;
-                    this.text = format(TEXT[1], name);
-                } else {
+                content = decodeUTF8(buffer);
+                if (content == null) {
                     this.status = 2;
                     this.text = format(TEXT[2], name, 'UTF8');
+                    this.$emit('error', name);
+                    return;
                 }
-            } else {
-                this.status = 1;
-                this.text = format(TEXT[1], name);
             }
 
+            this.status = 1;
+            this.text = format(TEXT[1], name);
             this.$emit('content', content, name);
         };
 
-        reader.onerror = e => {
+        this.reader.onerror = e => {
+            const error = e && e.target && e.target.error;
+            if (error && error.name === 'AbortError') {
+                return;
+            }
             this.status = 2;
-            this.text = format(TEXT[2]);
-
+            this.text = format(TEXT[2], this.file && this.file.name, 'UTF8');
             this.file = null;
-            console.warn('Yma Reader: 文件读取失败，' + e.message);
+            const message = e && e.target && e.target.error ? e.target.error.message : '';
+            console.warn('Yma Reader: 文件读取失败，' + message);
         };
+    },
+    beforeDestroy() {
+        if (!this.reader) {
+            return;
+        }
+        if (this.reader.readyState === FileReader.LOADING) {
+            this.reader.abort();
+        }
+        this.reader.onload = null;
+        this.reader.onerror = null;
+        this.reader = null;
     },
     methods: {
         changeHandler(e) {
             const file = e.target.files[0];
             e.target.value = '';
-            this.file = file;
-
-            if (this.type === 'text') {
-                // TODO 判断文件是否为 UTF-8
-                reader.readAsText(file);
-            } else if (this.type === 'buffer') {
-                reader.readAsArrayBuffer(file);
+            if (!file || !this.reader) {
+                return;
             }
+            if (this.reader.readyState === FileReader.LOADING) {
+                this.reader.abort();
+            }
+            this.file = file;
+            this.reader.readAsArrayBuffer(file);
         },
         clickHandler() {
             this.$refs.input.click();

@@ -34,8 +34,8 @@
             <slot name="prefix"></slot>
             <yma-icon
                 v-if="prefixIcon"
-                class="el-input__icon"
-                name="prefixIcon"
+                class="yma-input__icon"
+                :name="prefixIcon"
             />
         </span>
 
@@ -47,8 +47,8 @@
                     <slot name="suffix"></slot>
                     <yma-icon
                         v-if="suffixIcon"
-                        class="el-input__icon"
-                        name="suffixIcon"
+                        class="yma-input__icon"
+                        :name="suffixIcon"
                     />
                 </template>
                 <yma-icon
@@ -62,7 +62,7 @@
                     v-if="showPwdVisible"
                     class="yma-input__icon yma-icon-view yma-input__clear"
                     @mousedown.prevent
-                    @click="clear"
+                    @click="handlePasswordVisible"
                 />
 
                 <span v-if="isWordLimitVisible" class="yma-input__count">
@@ -79,6 +79,11 @@
 export default {
     name: 'YmaInput',
     componentName: 'YmaInput',
+    inject: {
+        ymaFormItem: {
+            default: null,
+        },
+    },
     props: {
         value: [String, Number],
         disabled: Boolean,
@@ -172,9 +177,16 @@ export default {
         blur() {
             this.getInput().blur();
         },
+        notifyForm(method) {
+            const formItem = this.ymaFormItem;
+            if (formItem && typeof formItem[method] === 'function') {
+                formItem[method]();
+            }
+        },
         handleBlur(event) {
             this.focused = false;
             this.$emit('blur', event);
+            this.notifyForm('onFieldBlur');
         },
         setNativeInputValue() {
             const input = this.getInput();
@@ -216,16 +228,19 @@ export default {
             }
 
             this.$emit('input', event.target.value);
+            this.notifyForm('onFieldChange');
 
             this.$nextTick(this.setNativeInputValue);
         },
         handleChange(event) {
             this.$emit('change', event.target.value);
+            this.notifyForm('onFieldChange');
         },
         clear() {
             this.$emit('input', '');
             this.$emit('change', '');
             this.$emit('clear');
+            this.notifyForm('onFieldChange');
         },
         handlePasswordVisible() {
             this.passwordVisible = !this.passwordVisible;

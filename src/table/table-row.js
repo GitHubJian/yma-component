@@ -1,8 +1,10 @@
 import YmaTableAppend from './table-append';
+import emitter from '../helper/emitter';
 
 export default {
     name: 'YmaTableRow',
     componentName: 'YmaTableRow',
+    mixins: [emitter],
     props: [
         'columns',
         'row',

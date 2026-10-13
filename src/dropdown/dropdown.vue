@@ -15,6 +15,7 @@
 import YmaIcon from '../icon';
 import clickoutside from '../helper/clickoutside';
 import emitter from '../helper/emitter';
+import popup from '../helper/popup';
 
 function includeIn(aList, bList) {
     return aList.every(a => bList.indexOf(a) > -1);
@@ -23,7 +24,7 @@ function includeIn(aList, bList) {
 export default {
     name: 'YmaDropdown',
     componentName: 'YmaDropdown',
-    mixins: [emitter],
+    mixins: [emitter, popup],
     directives: {clickoutside},
     provide() {
         return {
@@ -70,7 +71,6 @@ export default {
     },
     data() {
         return {
-            timeout: null,
             visible: false,
             triggerEl: null,
             dropdownEl: null,
@@ -99,54 +99,10 @@ export default {
         },
     },
     methods: {
-        show() {
-            if (this.disabled) {
-                return;
-            }
-
-            clearTimeout(this.timeout);
-            this.timeout = setTimeout(() => {
-                this.visible = true;
-            }, 300);
-        },
-        hide() {
-            if (this.disabled) {
-                return;
-            }
-
-            clearTimeout(this.timeout);
-            this.timeout = setTimeout(() => {
-                this.visible = false;
-            }, 300);
-        },
-        handleClick() {
-            if (this.disabled) {
-                return;
-            }
-
-            if (this.visible) {
-                this.hide();
-            }
-            else {
-                this.show();
-            }
-        },
         initEvent() {
-            let {trigger, show, hide, handleClick} = this;
-
             this.triggerEl = this.$refs.triggerEl;
-
-            let dropdownEl = this.dropdownEl;
-
-            if (trigger === 'hover') {
-                this.triggerEl.addEventListener('mouseenter', show);
-                this.triggerEl.addEventListener('mouseleave', hide);
-                dropdownEl.addEventListener('mouseenter', show);
-                dropdownEl.addEventListener('mouseleave', hide);
-            }
-            else if (trigger === 'click') {
-                this.triggerEl.addEventListener('click', handleClick);
-            }
+            this.dropdownEl = this.popperEl;
+            this.bindPopup(this.triggerEl, this.dropdownEl);
         },
         handleMenuItemClick(id, isActive) {
             if (id === '-1') {

@@ -28,7 +28,7 @@ export default {
         computedWidth (val, oldVal) {
             if (this.updateAll) {
                 this.ymaForm.registerLabelWidth(val, oldVal);
-                this.ymaForm.updateComputedLabelWidth(val);
+                this.ymaFormItem.updateComputedLabelWidth(val);
             }
         }
     },

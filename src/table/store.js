@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import {toggleRowStatus} from './util';
+import {toggleRowStatus, getKeysMap, getRowIdentity} from './util';
 function debounce(callback, delay) {
     let timerId;
 
@@ -20,14 +20,6 @@ const Store = Vue.extend({
 
                 _columns: [],
                 columns: [],
-                fixedColumns: [],
-                rightFixedColumns: [],
-                leafColumns: [],
-                fixedLeafColumns: [],
-                rightFixedLeafColumns: [],
-                leafColumnsLength: 0,
-                fixedLeafColumnsLength: 0,
-                rightFixedLeafColumnsLength: 0,
 
                 isScroll: false,
 
@@ -40,39 +32,16 @@ const Store = Vue.extend({
     },
     methods: {
         updateColumns() {
-            const states = this.states;
-            const _columns = states._columns || [];
-
-            states.columns = _columns;
-            // states.fixedColumns = _columns.filter(
-            //     column => column.fixed === true || column.fixed === 'left'
-            // );
-            // states.rightFixedColumns = _columns.filter(
-            //     column => column.fixed === 'right'
-            // );
-            // const notFixedColumns = _columns.filter(column => !column.fixed);
-            // states.originColumns = []
-            //     .concat(states.fixedColumns)
-            //     .concat(notFixedColumns)
-            //     .concat(states.rightFixedColumns);
-
-            // const leafColumns = notFixedColumns;
-            // const fixedLeafColumns = states.fixedColumns;
-            // const rightFixedLeafColumns = states.rightFixedColumns;
-
-            // states.leafColumnsLength = leafColumns.length;
-            // states.fixedLeafColumnsLength = fixedLeafColumns.length;
-            // states.rightFixedLeafColumnsLength = rightFixedLeafColumns.length;
-
-            // states.columns = []
-            //     .concat(fixedLeafColumns)
-            //     .concat(leafColumns)
-            //     .concat(rightFixedLeafColumns);
+            this.states.columns = this.states._columns || [];
         },
-        // 选择
+        refreshSelectionSet() {
+            this._selectionSet = new Set(this.states.selection || []);
+        },
         isSelected(row) {
-            const {selection = []} = this.states;
-            return selection.indexOf(row) > -1;
+            if (!this._selectionSet) {
+                this.refreshSelectionSet();
+            }
+            return this._selectionSet.has(row);
         },
         clearSelection() {
             const states = this.states;
@@ -80,6 +49,7 @@ const Store = Vue.extend({
             const oldSelection = states.selection;
             if (oldSelection.length) {
                 states.selection = [];
+                this.refreshSelectionSet();
                 this.table.$emit('selection-change', []);
             }
         },
@@ -94,6 +64,7 @@ const Store = Vue.extend({
 
                 this.table.$emit('selection-change', newSelection);
             }
+            this.refreshSelectionSet();
         },
         _toggleAllSelection() {
             const states = this.states;
@@ -120,6 +91,8 @@ const Store = Vue.extend({
                 }
             });
 
+            this.refreshSelectionSet();
+
             if (selectionChanged) {
                 this.table.$emit('selection-change', selection ? selection.slice() : []);
             }
@@ -140,11 +113,12 @@ const Store = Vue.extend({
             if (rowKey) {
                 selectedMap = getKeysMap(selection, rowKey);
             }
+            const selectedSet = selectedMap ? null : new Set(selection);
             const isSelected = function (row) {
                 if (selectedMap) {
                     return !!selectedMap[getRowIdentity(row, rowKey)];
                 }
-                return selection.indexOf(row) !== -1;
+                return selectedSet.has(row);
             };
             let isAllSelected = true;
             let selectedCount = 0;

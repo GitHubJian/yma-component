@@ -11,6 +11,7 @@
 
 <script>
 import YmaDropdownMenuItem from './dropdown-item.vue';
+import emitter from '../helper/emitter';
 
 function isNil(val) {
     return val === null || val === undefined;
@@ -19,6 +20,7 @@ function isNil(val) {
 export default {
     name: 'YmaDropdownMenu',
     componentName: 'YmaDropdownMenu',
+    mixins: [emitter],
     inject: ['dropdown'],
     components: {
         YmaDropdownMenuItem,

@@ -25,7 +25,7 @@
             >
             <input
                 v-else v-model="model"
-                class="el-checkbox__original" type="checkbox"
+                class="yma-checkbox__original" type="checkbox"
                 :disabled="isDisabled"
                 :value="label" :name="name"
                 @change="handleChange" @focus="focus = true"
@@ -176,7 +176,7 @@ export default {
         opacity: 0;
     }
 
-    @include e(lable) {
+    @include e(label) {
         display: inline-block;
         vertical-align: middle;
         padding-left: 8px;

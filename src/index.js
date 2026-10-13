@@ -7,10 +7,12 @@ import Countdown from './countdown';
 import Desktop from './desktop';
 import Dropdown from './dropdown';
 import Form from './form';
-import Icon from './icon';
+import Icon, {registerIcons} from './icon';
+import Input from './input';
 import Link from './link';
 import List from './list';
 import Menu from './menu';
+import Pagination from './pagination';
 import Panel from './panel';
 import Scroll from './scroll';
 import Row from './row';
@@ -33,9 +35,11 @@ const components = [
     Dropdown,
     Form,
     Icon,
+    Input,
     Link,
     List,
     Menu,
+    Pagination,
     Panel,
     Scroll,
     Row,
@@ -49,7 +53,9 @@ const components = [
 
 const install = function (Vue) {
     components.forEach(function (component) {
-        Vue.use(component.install);
+        if (component && typeof component.install === 'function') {
+            component.install(Vue);
+        }
     });
 };
 
@@ -66,9 +72,11 @@ export default {
     Dropdown,
     Form,
     Icon,
+    Input,
     Link,
     List,
     Menu,
+    Pagination,
     Panel,
     Scroll,
     Row,
@@ -81,3 +89,4 @@ export default {
 };
 
 export const Util = Util$;
+export {registerIcons};
