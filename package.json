@@ -1,6 +1,6 @@
 {
     "name": "yma-component",
-    "version": "1.0.8",
+    "version": "2.0.0",
     "description": "基于 VUE 的 YMA 组件库",
     "main": "./src/index.js",
     "module": "./src/index.js",
