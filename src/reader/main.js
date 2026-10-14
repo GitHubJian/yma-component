@@ -24,12 +24,9 @@ function format(source, params) {
     }
 
     params.forEach(function (param, i) {
-        source = source.replace(
-            new RegExp('\\{' + i + '\\}', 'g'),
-            function () {
-                return param;
-            }
-        );
+        source = source.replace(new RegExp('\\{' + i + '\\}', 'g'), function () {
+            return param;
+        });
     });
 
     return source;
@@ -162,9 +159,7 @@ export default {
                 <div class='yma-reader__inner' on-click={this.clickHandler}>
                     <yma-center align='center'>
                         <span class='yma-reader__logo'>
-                            {status === 0 && (
-                                <yma-icon name='symbol_cross'></yma-icon>
-                            )}
+                            {status === 0 && <yma-icon name='symbol_cross'></yma-icon>}
 
                             <span class='yma-reader__text'>{text}</span>
                         </span>

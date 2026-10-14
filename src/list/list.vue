@@ -1,7 +1,5 @@
 <template>
     <div class="yma-list">
-
-
         <div class="yma-list__body">
             <slot></slot>
         </div>
@@ -15,9 +13,8 @@ export default {
 </script>
 
 <style lang="scss">
-@import "yma-csskit/bem.scss";
+@import 'yma-csskit/bem.scss';
 
 @include b(list) {
-
 }
 </style>

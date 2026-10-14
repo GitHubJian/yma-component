@@ -65,7 +65,7 @@ export default {
                 return;
             }
 
-            this.handler((err, data) => {
+            this.handler(err => {
                 if (!err) {
                     this.lock = true;
                     this.text = `${this.num}s后重发`;
@@ -106,14 +106,15 @@ export default {
 </script>
 
 <style lang="scss">
-@import "yma-csskit/bem.scss";
+@import 'yma-csskit/bem.scss';
 
 @include b(countdown) {
     @include when(disabled) {
         opacity: .4;
+        cursor: default;
     }
 
-    color: var(--yma-color-primary, #3b64fc);
+    color: #3b64fc;
     font-weight: 400;
     font-style: normal;
     font-size: 14px;

@@ -1,0 +1,27 @@
+{
+    "name": "example",
+    "version": "1.0.0",
+    "main": "index.js",
+    "scripts": {
+        "dev": "cross-env PORT=8420 NODE_ENV=development yma dev"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "description": "",
+    "dependencies": {},
+    "devDependencies": {
+        "vue": "2.7.16",
+        "vue-template-compiler": "2.7.16",
+        "cross-env": "7.0.3",
+        "yma-csskit": "1.0.0",
+        "yma-cli": "2.0.1",
+        "yma-cli-base64": "2.0.1",
+        "yma-cli-lint": "2.0.1",
+        "yma-cli-zip": "2.0.1",
+        "yma-config-plugin-assets": "2.0.1",
+        "yma-config-plugin-externals": "2.0.1",
+        "yma-config-plugin-preload": "2.0.1",
+        "yma-config-plugin-sdk": "2.0.1"
+    }
+}

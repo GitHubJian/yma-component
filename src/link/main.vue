@@ -6,6 +6,7 @@
             underline && !disabled && 'is-underline',
             'yma-link--' + type,
         ]"
+        :href="disabled ? undefined : href"
         @click="handleClick"
     >
         <span class="yma-link__content">
@@ -61,10 +62,13 @@ export default {
     },
     methods: {
         handleClick(e) {
-            if (!this.disabled) {
-                if (!this.href) {
-                    this.$emit('click', e);
-                }
+            if (this.disabled) {
+                e.preventDefault();
+                return;
+            }
+
+            if (!this.href) {
+                this.$emit('click', e);
             }
         },
     },

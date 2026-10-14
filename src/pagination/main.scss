@@ -1,0 +1,226 @@
+@import 'yma-csskit/bem.scss';
+
+$--pagination-height: 32px;
+$--pagination-font-size: 14px;
+$--pagination-color: #0d0d0de5;
+$--pagination-secondary: #0d0d0da8;
+$--pagination-primary: #3b64fc;
+$--pagination-disabled: rgba(13, 13, 13, .3);
+$--pagination-hover-bg: rgba(13, 13, 13, .06);
+$--pagination-border: rgba(13, 13, 13, .12);
+$--pagination-border-hover: rgba(13, 13, 13, .24);
+$--pagination-focus: rgba(31, 105, 224, 1);
+$--pagination-radius: 6px;
+
+@include b(pagination) {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    color: $--pagination-color;
+    font-weight: 400;
+    font-size: $--pagination-font-size;
+    line-height: 22px;
+    white-space: nowrap;
+    user-select: none;
+
+    @include e((left, right)) {
+        display: flex;
+        align-items: center;
+    }
+
+    @include e(total) {
+        color: $--pagination-secondary;
+        font-weight: 400;
+    }
+
+    @include e(jump) {
+        display: inline-flex;
+        align-items: center;
+        margin-left: 16px;
+        color: $--pagination-color;
+        font-weight: 400;
+    }
+
+    @include e(jump-input) {
+        box-sizing: border-box;
+        width: 56px;
+        height: $--pagination-height;
+        margin: 0 8px;
+        padding: 0 8px;
+        border: 1px solid $--pagination-border;
+        border-radius: $--pagination-radius;
+        background-color: #fff;
+        color: $--pagination-color;
+        outline: none;
+        font-size: $--pagination-font-size;
+        font-family: inherit;
+        line-height: $--pagination-height;
+        text-align: center;
+        transition: border-color .2s;
+        appearance: none;
+
+        &:hover {
+            border-color: $--pagination-border-hover;
+        }
+
+        &:focus {
+            border-color: $--pagination-focus;
+        }
+
+        &:disabled {
+            border-color: $--pagination-border;
+            background-color: rgba(13, 13, 13, .06);
+            color: rgba(13, 13, 13, .46);
+            cursor: not-allowed;
+        }
+    }
+}
+
+@include b(pager) {
+    display: inline-flex;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: 0;
+
+    @include e((number, quick)) {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        box-sizing: border-box;
+        min-width: $--pagination-height;
+        height: $--pagination-height;
+        margin: 0 4px;
+        padding: 0 4px;
+        border-radius: $--pagination-radius;
+        color: $--pagination-color;
+        font-weight: 400;
+        font-size: $--pagination-font-size;
+        line-height: $--pagination-height;
+        text-align: center;
+        cursor: pointer;
+
+        &:hover {
+            background-color: $--pagination-hover-bg;
+            color: $--pagination-primary;
+        }
+
+        @include when(active) {
+            background-color: $--pagination-primary;
+            color: #fff;
+            font-weight: 600;
+            cursor: default;
+
+            &:hover {
+                background-color: $--pagination-primary;
+                color: #fff;
+            }
+        }
+
+        @include when(disabled) {
+            background-color: transparent;
+            color: $--pagination-disabled;
+            cursor: not-allowed;
+
+            &:hover {
+                background-color: transparent;
+                color: $--pagination-disabled;
+            }
+        }
+    }
+
+    @include e(quick-prev) {
+        &::before {
+            content: "...";
+            letter-spacing: 1px;
+        }
+
+        &:hover::before {
+            content: "«";
+            letter-spacing: 0;
+        }
+
+        @include when(disabled) {
+            &:hover::before {
+                content: "...";
+            }
+        }
+    }
+
+    @include e(quick-next) {
+        &::before {
+            content: "...";
+            letter-spacing: 1px;
+        }
+
+        &:hover::before {
+            content: "»";
+            letter-spacing: 0;
+        }
+
+        @include when(disabled) {
+            &:hover::before {
+                content: "...";
+            }
+        }
+    }
+}
+
+@include b(page) {
+    @include e(btn) {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        box-sizing: border-box;
+        min-width: $--pagination-height;
+        height: $--pagination-height;
+        margin: 0;
+        padding: 0 4px;
+        border: none;
+        border-radius: $--pagination-radius;
+        background-color: transparent;
+        color: $--pagination-color;
+        outline: none;
+        font-size: $--pagination-font-size;
+        font-family: inherit;
+        line-height: $--pagination-height;
+        cursor: pointer;
+
+        &:hover {
+            background-color: $--pagination-hover-bg;
+            color: $--pagination-primary;
+        }
+
+        &:disabled {
+            background-color: transparent;
+            color: $--pagination-disabled;
+            cursor: not-allowed;
+        }
+    }
+
+    @include e(btn-text) {
+        padding: 0 4px;
+        font-weight: 400;
+        font-size: $--pagination-font-size;
+        line-height: 22px;
+    }
+
+    @include e(btn-icon) {
+        display: inline-block;
+        box-sizing: border-box;
+        width: 8px;
+        height: 8px;
+        border-top: 1.5px solid currentColor;
+        border-right: 1.5px solid currentColor;
+
+        @include m(prev) {
+            transform: rotate(-135deg);
+        }
+
+        @include m(next) {
+            transform: rotate(45deg);
+        }
+    }
+}

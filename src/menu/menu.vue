@@ -1,5 +1,5 @@
 <template>
-    <div class="cms-menu">
+    <div class="yma-menu">
         <slot></slot>
     </div>
 </template>

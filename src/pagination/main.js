@@ -28,6 +28,22 @@ export default {
             type: Number,
             default: 1,
         },
+        total: Number,
+    },
+    computed: {
+        internalPageCount() {
+            if (typeof this.total === 'number') {
+                const pageSize = this.pageSize > 0 ? this.pageSize : 10;
+
+                return Math.max(1, Math.ceil(this.total / pageSize));
+            }
+
+            if (typeof this.pageCount === 'number') {
+                return Math.max(1, this.pageCount);
+            }
+
+            return 0;
+        },
     },
     data() {
         return {

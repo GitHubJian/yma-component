@@ -21,7 +21,7 @@ Vue.use(Yma);
 
 ## 组件
 
-`Vue.use` 会注册 Breadcrumb、Center、Checkbox、Choice、Col、Countdown、Desktop、Dropdown、Form、Icon、Input、Link、List、Menu、Pagination、Panel、Scroll、Row、Table、Tag、Text、Reader、Writer、Message。
+`Vue.use` 会注册 Breadcrumb、Center、Checkbox、Choice、Col、Countdown、Desktop、Dropdown、Form、Icon、Input、Link、List、Menu、Pagination、Panel、Scroll、Select、Row、Table、Tag、Text、Reader、Writer、Message。
 
 Desktop 同时注册 Aside、Header、Footer、Container、Main。有 `footer` 插槽时才会渲染底栏。
 
@@ -42,6 +42,19 @@ rules: {
 ```
 
 规则支持 `required`、`min`、`max`、`pattern`、`type`（`email`、`number`）和 `validator`。`this.$refs.form.validate()` 返回 Promise，也可以传入回调。`resetFields()` 恢复字段挂载时的值，`clearValidate()` 只清掉错误提示。
+
+## 选择器
+
+```html
+<yma-select v-model="city" placeholder="请选择" clearable>
+    <yma-select-option value="hz" label="杭州"></yma-select-option>
+    <yma-select-option value="sh" label="上海"></yma-select-option>
+</yma-select>
+
+<yma-select v-model="cities" multiple :options="options"></yma-select>
+```
+
+`options` 可以是字符串数组，或 `{ value, label, disabled }`。多选时 `v-model` 是数组。放进 `yma-form-item` 后，变更走 `change` 校验，收起菜单走 `blur` 校验。方向键移动选项，回车选中，Esc 关闭。
 
 ## 消息
 

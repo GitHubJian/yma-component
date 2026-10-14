@@ -14,7 +14,7 @@ export default {
     },
     computed: {
         pagers() {
-            const pagerCount = this.pageCount;
+            const pagerCount = this.pagerCount;
             const halfPagerCount = (pagerCount - 1) / 2;
 
             const currentPage = Number(this.currentPage);
@@ -73,7 +73,9 @@ export default {
                             'is-active': currentPage === 1,
                             'is-disabled': disabled,
                         }}
-                    ></li>
+                    >
+                        1
+                    </li>
                 ) : null}
 
                 {showPrevMore ? (

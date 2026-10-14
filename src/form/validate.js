@@ -61,12 +61,7 @@ export function normalizeRules(formRules, selfRules) {
 }
 
 function isEmpty(value) {
-    return (
-        value === undefined ||
-        value === null ||
-        value === '' ||
-        (Array.isArray(value) && value.length === 0)
-    );
+    return value === undefined || value === null || value === '' || (Array.isArray(value) && value.length === 0);
 }
 
 function builtinMessage(rule, value) {

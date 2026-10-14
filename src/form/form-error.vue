@@ -85,7 +85,6 @@ export default {
         color: #c25010;
         font-weight: 400;
         font-size: 12px;
-        font-family: PingFang SC;
         line-height: 20px;
         text-align: left;
 

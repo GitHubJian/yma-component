@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke-width="1.5"><desc>加载</desc><g id="group-0" stroke="#0A6CFF" fill="#0A6CFF"><path d="M8 14C9.09286 14 10.1175 13.7078 11 13.1973" stroke-linecap="round" stroke-linejoin="round" fill="none" vector-effect="non-scaling-stroke"/></g><g id="group-1" stroke="url(#paint0_linear_852_247)" fill="url(#paint0_linear_852_247)"><path d="M8 2C11.3137 2 14 4.6863 14 7.99996C14 10.2208 12.7934 12.1598 11 13.1973" stroke-linejoin="round" fill="none" vector-effect="non-scaling-stroke"/><defs>
+<linearGradient id="paint0_linear_852_247" x1="8" y1="12" x2="8" y2="3" gradientUnits="userSpaceOnUse">
+<stop stop-color="#0063F4"/>
+<stop offset="1" stop-color="#0063F4" stop-opacity="0.5"/>
+</linearGradient></defs></g><g id="group-2" stroke="url(#paint1_linear_852_247)" fill="url(#paint1_linear_852_247)"><path d="M8 2C4.68629 2 2 4.6863 2 8C2 11.3137 4.68629 14 8 14" stroke-linejoin="round" fill="none" vector-effect="non-scaling-stroke"/><defs><linearGradient id="paint1_linear_852_247" x1="7.5" y1="14" x2="8" y2="3" gradientUnits="userSpaceOnUse">
+<stop stop-color="#0063F4" stop-opacity="0"/>
+<stop offset="1" stop-color="#0063F4" stop-opacity="0.5"/>
+</linearGradient>
+</defs></g></svg>

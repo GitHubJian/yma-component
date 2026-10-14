@@ -105,7 +105,7 @@ export default {
                     <div class='yma-table__empty-wrapper'>
                         <div class='yma-table__empty'>
                             <div class='yma-table__empty-icon'>
-                                <yma-icon name='blank-contents-empty' is-cover={true} />
+                                <yma-icon name='blank_contents_empty' is-cover={true} />
                             </div>
 
                             <div class='yma-table__empty-text'>{this.emptyText}</div>

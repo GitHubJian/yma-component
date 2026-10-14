@@ -84,7 +84,6 @@ export default {
         color: #0d0d0de5;
         font-weight: 400;
         font-size: 14px;
-        font-family: PingFang SC;
         line-height: 14px;
         text-align: left;
         cursor: pointer;

@@ -4,25 +4,12 @@
     "description": "基于 VUE 的 YMA 组件库",
     "main": "./src/index.js",
     "module": "./src/index.js",
-    "sideEffects": [
-        "**/*.scss",
-        "**/*.css",
-        "**/*.vue",
-        "**/icon/plugin.js",
-        "**/icon/svg/**"
-    ],
-    "files": [
-        "src",
-        "README.md"
-    ],
+    "sideEffects": ["**/*.scss", "**/*.css", "**/*.vue", "**/icon/plugin.js", "**/icon/svg/**"],
+    "files": ["src", "README.md"],
     "scripts": {
-        "lint": "yma lint",
-        "test": "node --experimental-default-type=module --test test/validate.test.js"
+        "lint": "yma lint"
     },
-    "keywords": [
-        "vue",
-        "component"
-    ],
+    "keywords": ["vue", "component"],
     "author": "",
     "license": "ISC",
     "peerDependencies": {

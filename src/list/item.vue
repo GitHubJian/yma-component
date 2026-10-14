@@ -47,7 +47,6 @@ export default {
         color: #0d0d0da8;
         font-weight: 400;
         font-size: 14px;
-        font-family: PingFang SC;
         text-align: left;
     }
 
@@ -56,7 +55,6 @@ export default {
         color: #0d0d0de5;
         font-weight: 600;
         font-size: 18px;
-        font-family: PingFang SC;
         text-align: center;
     }
 }

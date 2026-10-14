@@ -29,7 +29,8 @@ export default {
 
 @include b(breadcrumb) {
     @include e(item) {
-        float: left;
+        display: inline-flex;
+        align-items: center;
 
         &:last-child {
             .yma-breadcrumb__inner {
@@ -46,30 +47,24 @@ export default {
         @include when(link) {
             cursor: pointer;
         }
-
-        display: inline-block;
-        vertical-align: middle;
     }
 
     @include e(separator) {
-        display: inline-block;
-        vertical-align: middle;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
         width: 16px;
         height: 16px;
         margin: 0 8px;
         line-height: 16px;
     }
 
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
     font-weight: 400;
     font-size: 14px;
-    font-family: PingFang SC;
     line-height: 32px;
     text-align: left;
-
-    &::after {
-        content: "";
-        display: block;
-        clear: both;
-    }
 }
 </style>
