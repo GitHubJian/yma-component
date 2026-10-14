@@ -159,7 +159,6 @@ export default {
         this.rootMenu.addSubmenu(this);
     },
     beforeDestroy() {
-        clearTimeout(this.timeout);
         this.parentMenu.removeSubmenu(this);
         this.rootMenu.removeSubmenu(this);
     },

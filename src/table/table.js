@@ -1,6 +1,6 @@
 import TableHeader from './table-header';
 import TableBody from './table-body';
-import {createStore} from './store';
+import {createStore, mapStates} from './store';
 import emitter from '../helper/emitter';
 
 let tableIdSeed = 0;
@@ -27,6 +27,12 @@ export default {
         this.store = createStore(this, {});
 
         return {};
+    },
+    computed: {
+        ...mapStates({
+            columns: 'columns',
+            fixedColumns: 'fixedColumns',
+        }),
     },
     watch: {
         data: {

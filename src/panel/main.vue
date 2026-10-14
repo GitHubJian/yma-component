@@ -26,32 +26,27 @@ export default {
 @import 'yma-csskit/bem.scss';
 
 @include b(panel) {
-    @include e(header) {
-        padding: 10px 15px;
-        border-color: #ddd;
-        border-bottom: 1px solid transparent;
-        border-top-left-radius: 3px;
-        border-top-right-radius: 3px;
-        background-color: #f5f5f5;
-        color: #333;
+    @include e(title) {
+        color: #0d0d0de5;
+        font-weight: 600;
+        font-size: 16px;
+        font-family: PingFang SC;
+        line-height: 24px;
+        text-align: left;
     }
 
     @include e(body) {
-        padding: 15px;
+        flex: 1;
+        overflow: hidden;
     }
 
-    @include e(footer) {
-        padding: 10px 15px;
-        border-top: 1px solid #ddd;
-        border-bottom-right-radius: 3px;
-        border-bottom-left-radius: 3px;
-        background-color: #f5f5f5;
-    }
-
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
     overflow: hidden;
-    border: 1px solid #ddd;
-    border-radius: 3px;
-    background-color: #fff;
-    box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+    height: 100%;
+    padding: 20px 32px 20px 32px;
+    border-radius: 8px;
+    background: #fff;
 }
 </style>

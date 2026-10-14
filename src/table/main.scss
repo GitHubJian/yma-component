@@ -19,9 +19,6 @@
     }
 
     @include e(header-wrapper) {
-        flex-shrink: 0;
-        position: relative;
-        z-index: 2;
     }
 
     @include e(header) {
@@ -71,6 +68,7 @@
 
     @include e(cell) {
         padding: 13px 16px;
+        font-family: PingFang SC;
         font-size: 14px;
         line-height: 28px;
         color: #0d0d0de5;
@@ -146,8 +144,7 @@
 
         @include e(body-wrapper) {
             flex: 1;
-            min-height: 0;
-            height: auto;
+            height: 100%;
             overflow: hidden;
         }
 
@@ -282,6 +279,7 @@
     }
 
     @include e(empty-text) {
+        font-family: PingFang SC;
         font-size: 16px;
         font-weight: 600;
         line-height: 24px;

@@ -10,16 +10,7 @@ export const cellStarts = {
 export const cellForced = {
     selection: {
         renderHeader: function (h, {store}) {
-            return (
-                <yma-checkbox
-                    nativeOn-click={e => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        this.toggleAllSelection();
-                    }}
-                    value={this.isAllSelected}
-                />
-            );
+            return <yma-checkbox on-input={this.toggleAllSelection} value={this.isAllSelected} />;
         },
         renderCell: function (h, {row, column, isSelected, store, $index}) {
             return (

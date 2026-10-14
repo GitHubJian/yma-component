@@ -25,8 +25,7 @@ export default {
             this.userInput = value;
         },
         handleChange(value) {
-            this.$parent.internalCurrentPage =
-                this.$parent.getValidCurrentPage(value);
+            this.$parent.internalCurrentPage = this.$parent.getValidCurrentPage(value);
             this.$parent.emitChange();
             this.userInput = null;
         },
@@ -39,11 +38,7 @@ export default {
                     class='el-pagination__editor is-in-pagination'
                     min={1}
                     max={this.$parent.internalPageCount}
-                    value={
-                        this.userInput !== null
-                            ? this.userInput
-                            : this.$parent.internalCurrentPage
-                    }
+                    value={this.userInput !== null ? this.userInput : this.$parent.internalCurrentPage}
                     type='number'
                     disabled={this.$parent.disabled}
                     nativeOnKeyup={this.handleKeyup}

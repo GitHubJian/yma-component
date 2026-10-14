@@ -3,9 +3,11 @@ import Button from './button';
 import Breadcrumb from './breadcrumb';
 import Center from './center';
 import Checkbox from './checkbox';
+import Choice from './choice';
 import Col from './col';
 import Countdown from './countdown';
 import Desktop from './desktop';
+import Dropdown from './dropdown';
 import Filter from './filter';
 import Form from './form';
 import Icon from './icon';
@@ -15,6 +17,7 @@ import List from './list';
 import Menu from './menu';
 import Pagination from './pagination';
 import Panel from './panel';
+import Pane from './pane';
 import Row from './row';
 import Table from './table';
 import Tag from './tag';
@@ -24,6 +27,7 @@ import Writer from './writer';
 import * as Util$ from './util';
 import Message from './message';
 import Grid from './grid';
+import Scroll from './scroll';
 
 const components = [
     Agreement,
@@ -31,9 +35,11 @@ const components = [
     Breadcrumb,
     Center,
     Checkbox,
+    Choice,
     Col,
     Countdown,
     Desktop,
+    Dropdown,
     Filter,
     Form,
     Icon,
@@ -43,6 +49,7 @@ const components = [
     Menu,
     Pagination,
     Panel,
+    Pane,
     Row,
     Table,
     Tag,
@@ -51,6 +58,7 @@ const components = [
     Writer,
     Message,
     Grid,
+    Scroll,
 ];
 
 const install = function (Vue) {
@@ -68,9 +76,11 @@ export default {
     Breadcrumb,
     Center,
     Checkbox,
+    Choice,
     Col,
     Countdown,
     Desktop,
+    Dropdown,
     Filter,
     Form,
     Icon,
@@ -80,6 +90,7 @@ export default {
     Menu,
     Pagination,
     Panel,
+    Pane,
     Row,
     Table,
     Tag,
@@ -88,6 +99,7 @@ export default {
     Writer,
     Message,
     Grid,
+    Scroll,
 };
 
 export const Util = Util$;

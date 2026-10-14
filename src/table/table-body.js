@@ -35,19 +35,24 @@ export default {
         };
     },
     watch: {
-        data() {
-            this.scheduleScrollCheck();
-        },
-        rowCount() {
-            this.scheduleScrollCheck();
+        'store.states.data': {
+            handler() {
+                this.$nextTick(() => {
+                    const body = this.$refs.body;
+                    const tbody = this.$refs.tbody;
+
+                    const bodyRect = body.getBoundingClientRect();
+                    const tbodyRect = tbody.getBoundingClientRect();
+
+                    this.store.commit('needScroll', bodyRect.height < tbodyRect.height);
+                });
+            },
+            deep: true,
         },
     },
     computed: {
         table() {
             return this.$parent;
-        },
-        rowCount() {
-            return this.data ? this.data.length : 0;
         },
         ...mapStates({
             data: 'data',
@@ -163,25 +168,6 @@ export default {
                 removeChild(this.phEl.parentNode, this.phEl);
             }
         },
-        scheduleScrollCheck() {
-            if (this._scrollFrame) {
-                return;
-            }
-            this._scrollFrame = requestAnimationFrame(() => {
-                this._scrollFrame = null;
-                this.updateScrollState();
-            });
-        },
-        updateScrollState() {
-            const body = this.$refs.body;
-            if (!body) {
-                return;
-            }
-            const needScroll = body.scrollHeight - body.clientHeight > 1;
-            if (needScroll !== this.store.states.isScroll) {
-                this.store.commit('needScroll', needScroll);
-            }
-        },
         handleCancel() {
             this.top = 0;
             this.isShowInput = false;
@@ -240,25 +226,5 @@ export default {
                 that.updateData(newIndex, oldIndex);
             },
         });
-        if (typeof ResizeObserver !== 'undefined' && this.$refs.body) {
-            this._resizeObserver = new ResizeObserver(() => {
-                this.scheduleScrollCheck();
-            });
-            this._resizeObserver.observe(this.$refs.body);
-            if (this.$refs.tbody) {
-                this._resizeObserver.observe(this.$refs.tbody);
-            }
-        }
-        this.scheduleScrollCheck();
-    },
-    beforeDestroy() {
-        if (this._resizeObserver) {
-            this._resizeObserver.disconnect();
-            this._resizeObserver = null;
-        }
-        if (this._scrollFrame) {
-            cancelAnimationFrame(this._scrollFrame);
-            this._scrollFrame = null;
-        }
     },
 };
